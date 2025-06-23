@@ -32,27 +32,21 @@
                 <span class="bar"></span>
             </div>
         </div>
-    
-        <!-- Header GIF -->
-        <div class="header-gif">
-            <img src="/images/header-racing-gif.gif" alt="Racing Action">
-            <div class="header-gif-overlay"></div>
-        </div>
     </nav>
 
     <!-- Hero Section with Video -->
     <section class="hero">
         <div class="hero-video">
             <video autoplay muted loop playsinline>
-                <source src="img/Spot Fecha 6 y 7 NASCAR Mexico City Weekend.mp4" type="video/mp4">
+                <source src="/placeholder.mp4" type="video/mp4">
                 <!-- Fallback image if video doesn't load -->
             </video>
             <div class="video-overlay"></div>
         </div>
         
         <div class="hero-content">
-            <div class="hero-logo">
-                <img src="img/blanco-png-300x236.png" alt="logo Nico Rivas" class="hero-logo-img">
+             <div class="hero-logo">
+                <img src="img/blanco-png-300x236.png" alt="logo">
             </div>
             
             <h1 class="hero-title">Nico Rivas</h1>
@@ -137,6 +131,37 @@
                 </div>
             </div>
         </div>
+    </section>
+
+    <!-- Multimedia Section -->
+    <section class="multimedia-section section">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-badge">
+                    <i class="fas fa-photo-video"></i>
+                    Multimedia
+                </div>
+                <h2>Galería y Videos</h2>
+                <p>Revive los mejores momentos de la carrera de Nico Rivas</p>
+            </div>
+            
+            <div class="multimedia-tabs">
+                <button class="multimedia-tab active" onclick="showMultimediaTab('videos')">
+                    <i class="fas fa-video"></i>
+                    Videos
+                </button>
+                <button class="multimedia-tab" onclick="showMultimediaTab('photos')">
+                    <i class="fas fa-images"></i>
+                    Fotos
+                </button>
+            </div>
+            
+            <!-- Videos Tab -->
+            <div id="videos-tab" class="multimedia-content active">
+                <div id="videos-gallery" class="multimedia-grid">
+                    <!-- Videos will be loaded here -->
+                </div>
+            </div>
     </section>
 
     <!-- Achievements Section -->

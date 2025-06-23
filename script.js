@@ -210,6 +210,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initializeSmoothScroll()
   initializeVideoModal()
   initializeNewsModal()
+  initializeMultimedia()
 })
 
 // Navigation functionality
@@ -598,8 +599,8 @@ revealStyle.textContent = `
 `
 document.head.appendChild(revealStyle)
 
-// Initialize reveal animation
-document.addEventListener("DOMContentLoaded", addRevealAnimation)
+// Initialize video autoplay handling
+document.addEventListener("DOMContentLoaded", handleVideoAutoplay)
 
 // Scroll to section function
 function scrollToSection(sectionId) {
@@ -866,3 +867,198 @@ document.addEventListener("DOMContentLoaded", () => {
   initializeFAQ()
 })
 
+// =============================================
+// MULTIMEDIA FUNCTIONALITY
+// =============================================
+
+// Initialize multimedia section
+function initializeMultimedia() {
+  loadMultimediaContent()
+}
+
+// Show multimedia tab
+function showMultimediaTab(tabName) {
+  // Remove active class from all tabs
+  document.querySelectorAll(".multimedia-tab").forEach((tab) => {
+    tab.classList.remove("active")
+  })
+
+  // Remove active class from all content
+  document.querySelectorAll(".multimedia-content").forEach((content) => {
+    content.classList.remove("active")
+  })
+
+  // Add active class to clicked tab
+  event.target.classList.add("active")
+
+  // Show corresponding content
+  document.getElementById(tabName + "-tab").classList.add("active")
+}
+
+// Load multimedia content from localStorage
+function loadMultimediaContent() {
+  loadVideosGallery()
+  loadPhotosGallery()
+}
+
+// Load videos gallery
+function loadVideosGallery() {
+  const videos = JSON.parse(localStorage.getItem("pilotVideos") || "[]")
+  const container = document.getElementById("videos-gallery")
+
+  if (videos.length === 0) {
+    container.innerHTML = `
+      <div class="multimedia-empty">
+        <i class="fas fa-video"></i>
+        <h3>No hay videos disponibles</h3>
+        <p>Los videos se mostrarán aquí una vez que sean agregados desde el panel de administración.</p>
+      </div>
+    `
+    return
+  }
+
+  container.innerHTML = videos
+    .map(
+      (video) => `
+    <div class="multimedia-item video-item" onclick="playVideo('${video.embedId}', '${video.title}')">
+      <div class="multimedia-thumbnail">
+        <img src="https://img.youtube.com/vi/${video.embedId}/maxresdefault.jpg" alt="${video.title}">
+        <div class="multimedia-overlay">
+          <div class="play-icon">
+            <i class="fas fa-play"></i>
+          </div>
+        </div>
+        <div class="multimedia-category">${video.category}</div>
+      </div>
+      <div class="multimedia-info">
+        <h4>${video.title}</h4>
+        <p>${video.description}</p>
+        <div class="multimedia-meta">
+          <span><i class="fas fa-calendar"></i> ${new Date(video.dateAdded).toLocaleDateString("es-ES")}</span>
+        </div>
+      </div>
+    </div>
+  `,
+    )
+    .join("")
+}
+
+// Load photos gallery
+function loadPhotosGallery() {
+  const photos = JSON.parse(localStorage.getItem("pilotPhotos") || "[]")
+  const container = document.getElementById("photos-gallery")
+
+  if (photos.length === 0) {
+    container.innerHTML = `
+      <div class="multimedia-empty">
+        <i class="fas fa-images"></i>
+        <h3>No hay fotos disponibles</h3>
+        <p>Las fotos se mostrarán aquí una vez que sean agregadas desde el panel de administración.</p>
+      </div>
+    `
+    return
+  }
+
+  container.innerHTML = photos
+    .map(
+      (photo) => `
+    <div class="multimedia-item photo-item" onclick="openPhotoModal('${photo.url}', '${photo.title}', '${photo.description}')">
+      <div class="multimedia-thumbnail">
+        <img src="${photo.url}" alt="${photo.title}" onerror="this.src='/placeholder.svg?height=300&width=400'">
+        <div class="multimedia-overlay">
+          <div class="view-icon">
+            <i class="fas fa-eye"></i>
+          </div>
+        </div>
+        <div class="multimedia-category">${photo.category}</div>
+      </div>
+      <div class="multimedia-info">
+        <h4>${photo.title}</h4>
+        <p>${photo.description}</p>
+        <div class="multimedia-meta">
+          <span><i class="fas fa-calendar"></i> ${new Date(photo.dateAdded).toLocaleDateString("es-ES")}</span>
+        </div>
+      </div>
+    </div>
+  `,
+    )
+    .join("")
+}
+
+// Play video in modal
+function playVideo(embedId, title) {
+  const modal = document.createElement("div")
+  modal.className = "multimedia-modal"
+  modal.innerHTML = `
+    <div class="modal-backdrop" onclick="this.parentElement.remove()"></div>
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3>${title}</h3>
+        <button class="modal-close" onclick="this.closest('.multimedia-modal').remove()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-content">
+        <div class="video-container">
+          <iframe src="https://www.youtube.com/embed/${embedId}?autoplay=1" frameborder="0" allowfullscreen allow="autoplay"></iframe>
+        </div>
+      </div>
+    </div>
+  `
+  document.body.appendChild(modal)
+  document.body.style.overflow = "hidden"
+
+  // Close modal with escape key
+  const closeModal = (e) => {
+    if (e.key === "Escape") {
+      modal.remove()
+      document.body.style.overflow = "auto"
+      document.removeEventListener("keydown", closeModal)
+    }
+  }
+  document.addEventListener("keydown", closeModal)
+}
+
+// Open photo modal
+function openPhotoModal(url, title, description) {
+  const modal = document.createElement("div")
+  modal.className = "multimedia-modal"
+  modal.innerHTML = `
+    <div class="modal-backdrop" onclick="this.parentElement.remove()"></div>
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3>${title}</h3>
+        <button class="modal-close" onclick="this.closest('.multimedia-modal').remove()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-content">
+        <img src="${url}" alt="${title}" style="max-width: 100%; height: auto; border-radius: 8px;">
+        ${description ? `<p style="margin-top: 1rem; color: #6b7280; text-align: center;">${description}</p>` : ""}
+      </div>
+    </div>
+  `
+  document.body.appendChild(modal)
+  document.body.style.overflow = "hidden"
+
+  // Close modal with escape key
+  const closeModal = (e) => {
+    if (e.key === "Escape") {
+      modal.remove()
+      document.body.style.overflow = "auto"
+      document.removeEventListener("keydown", closeModal)
+    }
+  }
+  document.addEventListener("keydown", closeModal)
+}
+
+// Refresh multimedia content (called from admin panel)
+function refreshMultimediaContent() {
+  loadMultimediaContent()
+}
+
+// Make functions available globally
+window.showMultimediaTab = showMultimediaTab
+window.playVideo = playVideo
+window.openPhotoModal = openPhotoModal
+window.refreshMultimediaContent = refreshMultimediaContent

@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Control - Nico Rivas</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body class="admin-body">
+    <!-- Admin Header -->
+    <header class="admin-header">
+        <div class="container">
+            <div class="admin-header-content">
+                <div class="admin-logo">
+                    <div class="nav-logo">
+                        <img src="../img/NR24-6-ok.png" alt="logo Nico Rivas" class="nav-logo-img">
+                    </div>
+                    <div class="logo-text">
+                        <span class="logo-name">PANEL DE</span>
+                        <span class="logo-surname">CONTROL</span>
+                    </div>
+                </div>
+                
+                <div class="admin-actions">
+                    <a href="../index.html" class="btn-secondary">
+                        <i class="fas fa-eye"></i>
+                        Ver Sitio Web
+                    </a>
+                    <button class="btn-primary" onclick="saveAllData()">
+                        <i class="fas fa-save"></i>
+                        Guardar Cambios
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Admin Navigation -->
+    <nav class="admin-nav">
+        <div class="container">
+            <div class="admin-nav-tabs">
+                <button class="nav-tab active" onclick="showSection('multimedia')">
+                    <i class="fas fa-photo-video"></i>
+                    Multimedia
+                </button>
+                <button class="nav-tab" onclick="showSection('noticias')">
+                    <i class="fas fa-newspaper"></i>
+                    Noticias
+                </button>
+                <button class="nav-tab" onclick="showSection('perfil')">
+                    <i class="fas fa-user"></i>
+                    Perfil del Piloto
+                </button>
+                <button class="nav-tab" onclick="showSection('configuracion')">
+                    <i class="fas fa-cog"></i>
+                    Configuración
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="admin-main">
+        <div class="container">
+            <!-- Multimedia Section -->
+            <section id="multimedia-section" class="admin-section active">
+                <div class="section-header">
+                    <h2>Gestión de Multimedia</h2>
+                    <p>Administra fotos y videos del piloto</p>
+                </div>
+
+                <div class="admin-grid">
+                    <!-- Videos Section -->
+                    <div class="admin-card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-video"></i> Videos de YouTube</h3>
+                            <button class="btn-primary btn-sm" onclick="openVideoModal()">
+                                <i class="fas fa-plus"></i>
+                                Agregar Video
+                            </button>
+                        </div>
+                        <div class="card-content">
+                            <div id="videos-list" class="media-grid">
+                                <!-- Videos will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Photos Section -->
+                    <div class="admin-card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-images"></i> Galería de Fotos</h3>
+                            <button class="btn-primary btn-sm" onclick="openPhotoModal()">
+                                <i class="fas fa-plus"></i>
+                                Agregar Foto
+                            </button>
+                        </div>
+                        <div class="card-content">
+                            <div id="photos-list" class="media-grid">
+                                <!-- Photos will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Noticias Section -->
+            <section id="noticias-section" class="admin-section">
+                <div class="section-header">
+                    <h2>Gestión de Noticias</h2>
+                    <p>Administra las noticias y actualizaciones del piloto</p>
+                </div>
+
+                <div class="admin-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-newspaper"></i> Noticias</h3>
+                        <button class="btn-primary btn-sm" onclick="openNewsModal()">
+                            <i class="fas fa-plus"></i>
+                            Nueva Noticia
+                        </button>
+                    </div>
+                    <div class="card-content">
+                        <div id="news-list" class="news-admin-grid">
+                            <!-- News will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Perfil Section -->
+            <section id="perfil-section" class="admin-section">
+                <div class="section-header">
+                    <h2>Perfil del Piloto</h2>
+                    <p>Actualiza la información personal y estadísticas</p>
+                </div>
+
+                <div class="admin-grid">
+                    <div class="admin-card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-user"></i> Información Personal</h3>
+                        </div>
+                        <div class="card-content">
+                            <form id="pilot-info-form" class="admin-form">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="pilot-name">Nombre Completo</label>
+                                        <input type="text" id="pilot-name" value="Nico Rivas">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="pilot-age">Edad</label>
+                                        <input type="number" id="pilot-age" value="21">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="pilot-bio">Biografía</label>
+                                    <textarea id="pilot-bio" rows="4">Piloto profesional de Trucks México Series desde 2018. Conquistando pistas mexicanas con pasión, determinación y excelencia deportiva.</textarea>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="admin-card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-trophy"></i> Estadísticas</h3>
+                        </div>
+                        <div class="card-content">
+                            <form id="pilot-stats-form" class="admin-form">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="victories">Victorias</label>
+                                        <input type="number" id="victories" value="3">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="podiums">Podios</label>
+                                        <input type="number" id="podiums" value="11">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="seasons">Temporadas</label>
+                                        <input type="number" id="seasons" value="6">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="debut-year">Año de Debut</label>
+                                        <input type="number" id="debut-year" value="2018">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Configuración Section -->
+            <section id="configuracion-section" class="admin-section">
+                <div class="section-header">
+                    <h2>Configuración del Sitio</h2>
+                    <p>Ajustes generales y configuraciones</p>
+                </div>
+
+                <div class="admin-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-cog"></i> Configuraciones</h3>
+                    </div>
+                    <div class="card-content">
+                        <div class="config-options">
+                            <div class="config-item">
+                                <div class="config-info">
+                                    <h4>Modo Mantenimiento</h4>
+                                    <p>Activar página de mantenimiento</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="maintenance-mode">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            
+                            <div class="config-item">
+                                <div class="config-info">
+                                    <h4>Notificaciones</h4>
+                                    <p>Recibir notificaciones por email</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="email-notifications" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+
+                            <div class="config-item">
+                                <div class="config-info">
+                                    <h4>Auto-guardar</h4>
+                                    <p>Guardar cambios automáticamente</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="auto-save" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="danger-zone">
+                            <h4><i class="fas fa-exclamation-triangle"></i> Zona de Peligro</h4>
+                            <p>Estas acciones son irreversibles</p>
+                            <div class="danger-actions">
+                                <button class="btn-danger" onclick="clearAllData()">
+                                    <i class="fas fa-trash"></i>
+                                    Limpiar Todos los Datos
+                                </button>
+                                <button class="btn-danger" onclick="resetToDefaults()">
+                                    <i class="fas fa-undo"></i>
+                                    Restaurar Valores por Defecto
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Video Modal -->
+    <div id="video-modal" class="admin-modal">
+        <div class="modal-backdrop" onclick="closeModal('video-modal')"></div>
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3><i class="fas fa-video"></i> Agregar Video de YouTube</h3>
+                <button class="modal-close" onclick="closeModal('video-modal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-content">
+                <form id="video-form" class="admin-form">
+                    <div class="form-group">
+                        <label for="video-url">URL de YouTube</label>
+                        <input type="url" id="video-url" placeholder="https://www.youtube.com/watch?v=..." required>
+                        <small>Pega la URL completa del video de YouTube</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="video-title">Título del Video</label>
+                        <input type="text" id="video-title" placeholder="Título descriptivo del video" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="video-description">Descripción</label>
+                        <textarea id="video-description" rows="3" placeholder="Descripción del video..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="video-category">Categoría</label>
+                        <select id="video-category" required>
+                            <option value="">Seleccionar categoría</option>
+                            <option value="carrera">Carrera</option>
+                            <option value="entrenamiento">Entrenamiento</option>
+                            <option value="entrevista">Entrevista</option>
+                            <option value="behind-scenes">Detrás de Cámaras</option>
+                            <option value="highlights">Highlights</option>
+                        </select>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn-secondary" onclick="closeModal('video-modal')">
+                            Cancelar
+                        </button>
+                        <button type="submit" class="btn-primary">
+                            <i class="fas fa-plus"></i>
+                            Agregar Video
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Photo Modal -->
+    <div id="photo-modal" class="admin-modal">
+        <div class="modal-backdrop" onclick="closeModal('photo-modal')"></div>
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3><i class="fas fa-image"></i> Agregar Foto</h3>
+                <button class="modal-close" onclick="closeModal('photo-modal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-content">
+                <form id="photo-form" class="admin-form">
+                    <div class="form-group">
+                        <label for="photo-url">URL de la Imagen</label>
+                        <input type="url" id="photo-url" placeholder="https://ejemplo.com/imagen.jpg" required>
+                        <small>URL directa de la imagen</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="photo-title">Título de la Foto</label>
+                        <input type="text" id="photo-title" placeholder="Título descriptivo" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="photo-description">Descripción</label>
+                        <textarea id="photo-description" rows="3" placeholder="Descripción de la foto..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="photo-category">Categoría</label>
+                        <select id="photo-category" required>
+                            <option value="">Seleccionar categoría</option>
+                            <option value="carrera">Carrera</option>
+                            <option value="podio">Podio</option>
+                            <option value="equipo">Equipo</option>
+                            <option value="personal">Personal</option>
+                            <option value="vehiculo">Vehículo</option>
+                        </select>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn-secondary" onclick="closeModal('photo-modal')">
+                            Cancelar
+                        </button>
+                        <button type="submit" class="btn-primary">
+                            <i class="fas fa-plus"></i>
+                            Agregar Foto
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- News Modal -->
+    <div id="news-modal" class="admin-modal">
+        <div class="modal-backdrop" onclick="closeModal('news-modal')"></div>
+        <div class="modal-container large">
+            <div class="modal-header">
+                <h3><i class="fas fa-newspaper"></i> <span id="news-modal-title">Agregar Noticia</span></h3>
+                <button class="modal-close" onclick="closeModal('news-modal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-content">
+                <form id="news-form" class="admin-form">
+                    <input type="hidden" id="news-id">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="news-title">Título de la Noticia</label>
+                            <input type="text" id="news-title" placeholder="Título de la noticia" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="news-category-select">Categoría</label>
+                            <select id="news-category-select" required>
+                                <option value="">Seleccionar categoría</option>
+                                <option value="Victoria">Victoria</option>
+                                <option value="Carrera">Carrera</option>
+                                <option value="Entrevista">Entrevista</option>
+                                <option value="Equipo">Equipo</option>
+                                <option value="Patrocinio">Patrocinio</option>
+                                <option value="Preparación">Preparación</option>
+                                <option value="Análisis">Análisis</option>
+                                <option value="Balance">Balance</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="news-image">URL de Imagen</label>
+                        <input type="url" id="news-image" placeholder="https://ejemplo.com/imagen.jpg" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="news-excerpt">Resumen</label>
+                        <textarea id="news-excerpt" rows="3" placeholder="Breve resumen de la noticia..." required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="news-content">Contenido Completo</label>
+                        <textarea id="news-content" rows="8" placeholder="Contenido completo de la noticia..." required></textarea>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="news-author">Autor</label>
+                            <input type="text" id="news-author" placeholder="Nombre del autor" value="Equipo de Prensa">
+                        </div>
+                        <div class="form-group">
+                            <label for="news-tags">Tags (separados por coma)</label>
+                            <input type="text" id="news-tags" placeholder="tag1, tag2, tag3">
+                        </div>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn-secondary" onclick="closeModal('news-modal')">
+                            Cancelar
+                        </button>
+                        <button type="submit" class="btn-primary">
+                            <i class="fas fa-save"></i>
+                            <span id="news-submit-text">Guardar Noticia</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Toast -->
+    <div id="success-toast" class="toast success">
+        <i class="fas fa-check-circle"></i>
+        <span id="success-message">Operación exitosa</span>
+    </div>
+
+    <!-- Error Toast -->
+    <div id="error-toast" class="toast error">
+        <i class="fas fa-exclamation-circle"></i>
+        <span id="error-message">Error en la operación</span>
+    </div>
+
+    <script src="../script.js"></script>
+    <script src="admin.js"></script>
+</body>
+</html>
