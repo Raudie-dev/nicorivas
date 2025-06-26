@@ -13,8 +13,8 @@
     <nav class="navbar" id="navbar">
         <div class="nav-container">
             <div class="nav-left">
-                <a href="index.html" class="nav-link">HOME</a>
-                <a href="patrocinadores.html" class="nav-link">PATROCINADORES</a>
+                <a href="index.php" class="nav-link">HOME</a>
+                <a href="patrocinadores.php" class="nav-link">PATROCINADORES</a>
             </div>
             
             <div class="nav-logo">
@@ -22,8 +22,8 @@
             </div>
             
             <div class="nav-right">
-                <a href="carreras.html" class="nav-link">PRÓXIMAS CARRERAS</a>
-                <a href="contacto.html" class="nav-link active">CONTÁCTANOS</a>
+                <a href="carreras.php" class="nav-link">PRÓXIMAS CARRERAS</a>
+                <a href="contacto.php" class="nav-link active">CONTÁCTANOS</a>
             </div>
             
             <div class="hamburger" id="hamburger">
@@ -297,10 +297,10 @@
                     <div class="footer-column">
                         <h4>Navegación</h4>
                         <ul>
-                            <li><a href="index.html">Home</a></li>
-                            <li><a href="patrocinadores.html">Patrocinadores</a></li>
-                            <li><a href="carreras.html">Próximas Carreras</a></li>
-                            <li><a href="contacto.html">Contáctanos</a></li>
+                            <li><a href="index.php">Home</a></li>
+                            <li><a href="patrocinadores.php">Patrocinadores</a></li>
+                            <li><a href="carreras.php">Próximas Carreras</a></li>
+                            <li><a href="contacto.php">Contáctanos</a></li>
                         </ul>
                     </div>
                     

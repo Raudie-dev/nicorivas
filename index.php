@@ -13,8 +13,8 @@
     <nav class="navbar" id="navbar">
         <div class="nav-container">
             <div class="nav-left">
-                <a href="index.html" class="nav-link">HOME</a>
-                <a href="patrocinadores.html" class="nav-link">PATROCINADORES</a>
+                <a href="index.php" class="nav-link">HOME</a>
+                <a href="patrocinadores.php" class="nav-link">PATROCINADORES</a>
             </div>
             
             <div class="nav-logo">
@@ -22,8 +22,8 @@
             </div>
             
             <div class="nav-right">
-                <a href="carreras.html" class="nav-link">PRÓXIMAS CARRERAS</a>
-                <a href="contacto.html" class="nav-link">CONTÁCTANOS</a>
+                <a href="carreras.php" class="nav-link">PRÓXIMAS CARRERAS</a>
+                <a href="contacto.php" class="nav-link">CONTÁCTANOS</a>
             </div>
             
             <div class="hamburger" id="hamburger">
@@ -36,10 +36,10 @@
 
     <!-- Mobile Navigation -->
     <div class="mobile-nav" id="mobile-nav">
-        <a href="index.html" class="nav-link active">HOME</a>
-        <a href="patrocinadores.html" class="nav-link">PATROCINADORES</a>
-        <a href="carreras.html" class="nav-link">PRÓXIMAS CARRERAS</a>
-        <a href="contacto.html" class="nav-link">CONTÁCTANOS</a>
+        <a href="index.php" class="nav-link active">HOME</a>
+        <a href="patrocinadores.php" class="nav-link">PATROCINADORES</a>
+        <a href="carreras.php" class="nav-link">PRÓXIMAS CARRERAS</a>
+        <a href="contacto.php" class="nav-link">CONTÁCTANOS</a>
     </div>
 
     <!-- Hero Section with Video -->
@@ -81,7 +81,7 @@
             
             <div class="hero-actions">
                 <a href="#about" class="btn-primary">Conoce mi historia</a>
-                <a href="carreras.html" class="btn-secondary">Ver carreras</a>
+                <a href="carreras.php" class="btn-secondary">Ver carreras</a>
             </div>
         </div>
         
@@ -294,7 +294,7 @@
             
             <!-- News CTA Button -->
             <div class="news-cta">
-                <a href="carreras.html#noticias" class="btn-primary">
+                <a href="carreras.php#noticias" class="btn-primary">
                     <span>Ver todas las noticias</span>
                     <i class="fas fa-arrow-right"></i>
                 </a>
@@ -309,8 +309,8 @@
                 <h2>¿Quieres ser parte del equipo?</h2>
                 <p>Únete a nuestro proyecto deportivo y forma parte de la historia del automovilismo mexicano</p>
                 <div class="cta-buttons">
-                    <a href="patrocinadores.html" class="btn-primary">Oportunidades de patrocinio</a>
-                    <a href="contacto.html" class="btn-secondary">Contactar</a>
+                    <a href="patrocinadores.php" class="btn-primary">Oportunidades de patrocinio</a>
+                    <a href="contacto.php" class="btn-secondary">Contactar</a>
                 </div>
             </div>
         </div>
@@ -350,10 +350,10 @@
                     <div class="footer-column">
                         <h4>Navegación</h4>
                         <ul>
-                            <li><a href="index.html">Home</a></li>
-                            <li><a href="patrocinadores.html">Patrocinadores</a></li>
-                            <li><a href="carreras.html">Próximas Carreras</a></li>
-                            <li><a href="contacto.html">Contáctanos</a></li>
+                            <li><a href="index.php">Home</a></li>
+                            <li><a href="patrocinadores.php">Patrocinadores</a></li>
+                            <li><a href="carreras.php">Próximas Carreras</a></li>
+                            <li><a href="contacto.php">Contáctanos</a></li>
                         </ul>
                     </div>
                     
