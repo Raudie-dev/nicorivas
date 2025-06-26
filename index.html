@@ -34,11 +34,19 @@
         </div>
     </nav>
 
+    <!-- Mobile Navigation -->
+    <div class="mobile-nav" id="mobile-nav">
+        <a href="index.html" class="nav-link active">HOME</a>
+        <a href="patrocinadores.html" class="nav-link">PATROCINADORES</a>
+        <a href="carreras.html" class="nav-link">PRÓXIMAS CARRERAS</a>
+        <a href="contacto.html" class="nav-link">CONTÁCTANOS</a>
+    </div>
+
     <!-- Hero Section with Video -->
     <section class="hero">
         <div class="hero-video">
             <video autoplay muted loop playsinline>
-                <source src="/placeholder.mp4" type="video/mp4">
+                <source src="img/WhatsApp-Video-2024-04-09-at-8.08.48-PM.mp4" type="video/mp4">
                 <!-- Fallback image if video doesn't load -->
             </video>
             <div class="video-overlay"></div>
@@ -121,7 +129,7 @@
                 
                 <div class="about-visual">
                     <div class="image-container">
-                        <img src="/images/nico-portrait.jpg" alt="Nico Rivas en pista">
+                        <img src="img/A7400831-scaled.jpg" alt="Nico Rivas en pista">
                         <div class="image-overlay">
                             <div class="play-button" onclick="openVideoModal()">
                                 <i class="fas fa-play"></i>
@@ -159,9 +167,25 @@
             <!-- Videos Tab -->
             <div id="videos-tab" class="multimedia-content active">
                 <div id="videos-gallery" class="multimedia-grid">
-                    <!-- Videos will be loaded here -->
+                    <div class="multimedia-empty">
+                        <i class="fas fa-video"></i>
+                        <h3>Videos Próximamente</h3>
+                        <p>Los videos se mostrarán aquí una vez que sean agregados desde el panel de administración.</p>
+                    </div>
                 </div>
             </div>
+
+            <!-- Photos Tab -->
+            <div id="photos-tab" class="multimedia-content">
+                <div id="photos-gallery" class="multimedia-grid">
+                    <div class="multimedia-empty">
+                        <i class="fas fa-images"></i>
+                        <h3>Fotos Próximamente</h3>
+                        <p>Las fotos se mostrarán aquí una vez que sean agregadas desde el panel de administración.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
 
     <!-- Achievements Section -->
@@ -227,7 +251,7 @@
             <div class="news-grid">
                 <article class="news-card featured">
                     <div class="news-image">
-                        <img src="/images/victory-aguascalientes.jpg" alt="Victoria reciente">
+                        <img src="/placeholder.svg?height=300&width=500" alt="Victoria reciente">
                         <div class="news-category">Victoria</div>
                     </div>
                     <div class="news-content">
@@ -241,7 +265,7 @@
                 
                 <article class="news-card">
                     <div class="news-image">
-                        <img src="/images/team-preparation.jpg" alt="Preparación temporada">
+                        <img src="/placeholder.svg?height=200&width=350" alt="Preparación temporada">
                         <div class="news-category">Preparación</div>
                     </div>
                     <div class="news-content">
@@ -255,7 +279,7 @@
                 
                 <article class="news-card">
                     <div class="news-image">
-                        <img src="/images/new-sponsors.jpg" alt="Nuevo patrocinador">
+                        <img src="/placeholder.svg?height=200&width=350" alt="Nuevo patrocinador">
                         <div class="news-category">Patrocinio</div>
                     </div>
                     <div class="news-content">
@@ -265,7 +289,7 @@
                             <span class="news-date">5 Marzo 2024</span>
                         </div>
                     </div>
-                </div>
+                </article>
             </div>
             
             <!-- News CTA Button -->
@@ -356,7 +380,7 @@
         <div class="modal-content">
             <span class="modal-close" onclick="closeVideoModal()">&times;</span>
             <video id="modalVideo" controls>
-                <source src="/placeholder.mp4" type="video/mp4">
+                <source src="img/WhatsApp-Video-2024-04-12-at-11.57.35-AM-1.mp4" type="video/mp4">
                 Tu navegador no soporta el elemento de video.
             </video>
         </div>

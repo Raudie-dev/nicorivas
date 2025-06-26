@@ -28,7 +28,7 @@
                         <i class="fas fa-eye"></i>
                         Ver Sitio Web
                     </a>
-                    <button class="btn-primary" onclick="saveAllData()">
+                    <button class="btn-primary" onclick="showSaveToast()">
                         <i class="fas fa-save"></i>
                         Guardar Cambios
                     </button>
@@ -48,6 +48,10 @@
                 <button class="nav-tab" onclick="showSection('noticias')">
                     <i class="fas fa-newspaper"></i>
                     Noticias
+                </button>
+                <button class="nav-tab" onclick="showSection('carreras')">
+                    <i class="fas fa-flag-checkered"></i>
+                    Próximas Carreras
                 </button>
                 <button class="nav-tab" onclick="showSection('perfil')">
                     <i class="fas fa-user"></i>
@@ -76,14 +80,19 @@
                     <div class="admin-card">
                         <div class="card-header">
                             <h3><i class="fas fa-video"></i> Videos de YouTube</h3>
-                            <button class="btn-primary btn-sm" onclick="openVideoModal()">
+                            <button class="btn-primary btn-sm" onclick="openModal('video-modal')">
                                 <i class="fas fa-plus"></i>
                                 Agregar Video
                             </button>
                         </div>
                         <div class="card-content">
                             <div id="videos-list" class="media-grid">
-                                <!-- Videos will be loaded here -->
+                                <!-- Videos will be loaded here from database -->
+                                <div class="empty-state">
+                                    <i class="fas fa-video"></i>
+                                    <h4>No hay videos</h4>
+                                    <p>Agrega tu primer video de YouTube</p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -92,14 +101,19 @@
                     <div class="admin-card">
                         <div class="card-header">
                             <h3><i class="fas fa-images"></i> Galería de Fotos</h3>
-                            <button class="btn-primary btn-sm" onclick="openPhotoModal()">
+                            <button class="btn-primary btn-sm" onclick="openModal('photo-modal')">
                                 <i class="fas fa-plus"></i>
                                 Agregar Foto
                             </button>
                         </div>
                         <div class="card-content">
                             <div id="photos-list" class="media-grid">
-                                <!-- Photos will be loaded here -->
+                                <!-- Photos will be loaded here from database -->
+                                <div class="empty-state">
+                                    <i class="fas fa-images"></i>
+                                    <h4>No hay fotos</h4>
+                                    <p>Agrega tu primera foto a la galería</p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -116,15 +130,113 @@
                 <div class="admin-card">
                     <div class="card-header">
                         <h3><i class="fas fa-newspaper"></i> Noticias</h3>
-                        <button class="btn-primary btn-sm" onclick="openNewsModal()">
+                        <button class="btn-primary btn-sm" onclick="openModal('news-modal')">
                             <i class="fas fa-plus"></i>
                             Nueva Noticia
                         </button>
                     </div>
                     <div class="card-content">
                         <div id="news-list" class="news-admin-grid">
-                            <!-- News will be loaded here -->
+                            <!-- News will be loaded here from database -->
+                            <div class="empty-state">
+                                <i class="fas fa-newspaper"></i>
+                                <h4>No hay noticias</h4>
+                                <p>Crea tu primera noticia</p>
+                            </div>
                         </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Próximas Carreras Section -->
+            <section id="carreras-section" class="admin-section">
+                <div class="section-header">
+                    <h2>Gestión de Próximas Carreras</h2>
+                    <p>Administra el calendario de carreras y resultados</p>
+                </div>
+
+                <div class="admin-grid">
+                    <!-- Upcoming Races -->
+                    <div class="admin-card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-calendar-plus"></i> Próximas Carreras</h3>
+                            <button class="btn-primary btn-sm" onclick="openModal('race-modal')">
+                                <i class="fas fa-plus"></i>
+                                Agregar Carrera
+                            </button>
+                        </div>
+                        <div class="card-content">
+                            <div id="upcoming-races-list" class="races-admin-grid">
+                                <!-- Upcoming races will be loaded here from database -->
+                                <div class="empty-state">
+                                    <i class="fas fa-calendar-plus"></i>
+                                    <h4>No hay carreras programadas</h4>
+                                    <p>Agrega tu primera carrera al calendario</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Results -->
+                    <div class="admin-card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-trophy"></i> Resultados Recientes</h3>
+                            <button class="btn-primary btn-sm" onclick="openModal('result-modal')">
+                                <i class="fas fa-plus"></i>
+                                Agregar Resultado
+                            </button>
+                        </div>
+                        <div class="card-content">
+                            <div id="recent-results-list" class="results-admin-grid">
+                                <!-- Recent results will be loaded here from database -->
+                                <div class="empty-state">
+                                    <i class="fas fa-trophy"></i>
+                                    <h4>No hay resultados</h4>
+                                    <p>Agrega tu primer resultado de carrera</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Season Stats -->
+                <div class="admin-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-chart-line"></i> Estadísticas de Temporada</h3>
+                    </div>
+                    <div class="card-content">
+                        <form id="season-stats-form" class="admin-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="season-year">Temporada</label>
+                                    <input type="number" id="season-year" placeholder="2024">
+                                </div>
+                                <div class="form-group">
+                                    <label for="championship-position">Posición en Campeonato</label>
+                                    <input type="number" id="championship-position" placeholder="Posición actual">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="season-victories">Victorias en Temporada</label>
+                                    <input type="number" id="season-victories" placeholder="Número de victorias">
+                                </div>
+                                <div class="form-group">
+                                    <label for="season-podiums">Podios en Temporada</label>
+                                    <input type="number" id="season-podiums" placeholder="Número de podios">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="season-points">Puntos Totales</label>
+                                    <input type="number" id="season-points" placeholder="Puntos acumulados">
+                                </div>
+                                <div class="form-group">
+                                    <label for="points-gap">Diferencia con Líder</label>
+                                    <input type="number" id="points-gap" placeholder="Diferencia de puntos">
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </section>
@@ -146,16 +258,16 @@
                                 <div class="form-row">
                                     <div class="form-group">
                                         <label for="pilot-name">Nombre Completo</label>
-                                        <input type="text" id="pilot-name" value="Nico Rivas">
+                                        <input type="text" id="pilot-name" placeholder="Nombre del piloto">
                                     </div>
                                     <div class="form-group">
                                         <label for="pilot-age">Edad</label>
-                                        <input type="number" id="pilot-age" value="21">
+                                        <input type="number" id="pilot-age" placeholder="Edad">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="pilot-bio">Biografía</label>
-                                    <textarea id="pilot-bio" rows="4">Piloto profesional de Trucks México Series desde 2018. Conquistando pistas mexicanas con pasión, determinación y excelencia deportiva.</textarea>
+                                    <textarea id="pilot-bio" rows="4" placeholder="Biografía del piloto..."></textarea>
                                 </div>
                             </form>
                         </div>
@@ -170,21 +282,21 @@
                                 <div class="form-row">
                                     <div class="form-group">
                                         <label for="victories">Victorias</label>
-                                        <input type="number" id="victories" value="3">
+                                        <input type="number" id="victories" placeholder="Total de victorias">
                                     </div>
                                     <div class="form-group">
                                         <label for="podiums">Podios</label>
-                                        <input type="number" id="podiums" value="11">
+                                        <input type="number" id="podiums" placeholder="Total de podios">
                                     </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group">
                                         <label for="seasons">Temporadas</label>
-                                        <input type="number" id="seasons" value="6">
+                                        <input type="number" id="seasons" placeholder="Temporadas activas">
                                     </div>
                                     <div class="form-group">
                                         <label for="debut-year">Año de Debut</label>
-                                        <input type="number" id="debut-year" value="2018">
+                                        <input type="number" id="debut-year" placeholder="Año de debut">
                                     </div>
                                 </div>
                             </form>
@@ -223,7 +335,7 @@
                                     <p>Recibir notificaciones por email</p>
                                 </div>
                                 <label class="toggle-switch">
-                                    <input type="checkbox" id="email-notifications" checked>
+                                    <input type="checkbox" id="email-notifications">
                                     <span class="slider"></span>
                                 </label>
                             </div>
@@ -234,7 +346,7 @@
                                     <p>Guardar cambios automáticamente</p>
                                 </div>
                                 <label class="toggle-switch">
-                                    <input type="checkbox" id="auto-save" checked>
+                                    <input type="checkbox" id="auto-save">
                                     <span class="slider"></span>
                                 </label>
                             </div>
@@ -244,11 +356,11 @@
                             <h4><i class="fas fa-exclamation-triangle"></i> Zona de Peligro</h4>
                             <p>Estas acciones son irreversibles</p>
                             <div class="danger-actions">
-                                <button class="btn-danger" onclick="clearAllData()">
+                                <button class="btn-danger" onclick="showDeleteToast()">
                                     <i class="fas fa-trash"></i>
                                     Limpiar Todos los Datos
                                 </button>
-                                <button class="btn-danger" onclick="resetToDefaults()">
+                                <button class="btn-danger" onclick="showSaveToast()">
                                     <i class="fas fa-undo"></i>
                                     Restaurar Valores por Defecto
                                 </button>
@@ -260,6 +372,7 @@
         </div>
     </main>
 
+    <!-- Modals -->
     <!-- Video Modal -->
     <div id="video-modal" class="admin-modal">
         <div class="modal-backdrop" onclick="closeModal('video-modal')"></div>
@@ -408,7 +521,7 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label for="news-author">Autor</label>
-                            <input type="text" id="news-author" placeholder="Nombre del autor" value="Equipo de Prensa">
+                            <input type="text" id="news-author" placeholder="Nombre del autor">
                         </div>
                         <div class="form-group">
                             <label for="news-tags">Tags (separados por coma)</label>
@@ -429,19 +542,166 @@
         </div>
     </div>
 
-    <!-- Success Toast -->
+    <!-- Race Modal -->
+    <div id="race-modal" class="admin-modal">
+        <div class="modal-backdrop" onclick="closeModal('race-modal')"></div>
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3><i class="fas fa-flag-checkered"></i> <span id="race-modal-title">Agregar Carrera</span></h3>
+                <button class="modal-close" onclick="closeModal('race-modal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-content">
+                <form id="race-form" class="admin-form">
+                    <input type="hidden" id="race-id">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="race-name">Nombre de la Carrera</label>
+                            <input type="text" id="race-name" placeholder="Gran Premio de México" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="race-date">Fecha</label>
+                            <input type="date" id="race-date" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="race-time">Hora</label>
+                            <input type="time" id="race-time" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="race-status">Estado</label>
+                            <select id="race-status" required>
+                                <option value="upcoming">Próxima</option>
+                                <option value="next">Siguiente Carrera</option>
+                                <option value="completed">Completada</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="race-location">Ubicación</label>
+                        <input type="text" id="race-location" placeholder="Autódromo Hermanos Rodríguez, CDMX" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="race-description">Descripción</label>
+                        <textarea id="race-description" rows="3" placeholder="Descripción de la carrera..."></textarea>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="race-transmission">Transmisión</label>
+                            <input type="text" id="race-transmission" placeholder="Transmisión en vivo">
+                        </div>
+                        <div class="form-group">
+                            <label for="race-category">Categoría</label>
+                            <select id="race-category">
+                                <option value="trucks-mexico">Trucks México Series</option>
+                                <option value="nascar-mexico">NASCAR México</option>
+                                <option value="formula">Fórmula</option>
+                                <option value="other">Otra</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn-secondary" onclick="closeModal('race-modal')">
+                            Cancelar
+                        </button>
+                        <button type="submit" class="btn-primary">
+                            <i class="fas fa-save"></i>
+                            <span id="race-submit-text">Guardar Carrera</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Result Modal -->
+    <div id="result-modal" class="admin-modal">
+        <div class="modal-backdrop" onclick="closeModal('result-modal')"></div>
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3><i class="fas fa-trophy"></i> <span id="result-modal-title">Agregar Resultado</span></h3>
+                <button class="modal-close" onclick="closeModal('result-modal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-content">
+                <form id="result-form" class="admin-form">
+                    <input type="hidden" id="result-id">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="result-race-name">Nombre de la Carrera</label>
+                            <input type="text" id="result-race-name" placeholder="Copa Aguascalientes" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="result-date">Fecha</label>
+                            <input type="date" id="result-date" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="result-position">Posición</label>
+                            <input type="number" id="result-position" min="1" placeholder="1" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="result-type">Tipo de Resultado</label>
+                            <select id="result-type" required>
+                                <option value="victory">Victoria</option>
+                                <option value="podium">Podio</option>
+                                <option value="points">Puntos</option>
+                                <option value="dnf">No Terminó</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="result-location">Ubicación</label>
+                        <input type="text" id="result-location" placeholder="Autódromo de Aguascalientes, AGS" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="result-laps">Vueltas</label>
+                            <input type="number" id="result-laps" placeholder="45">
+                        </div>
+                        <div class="form-group">
+                            <label for="result-distance">Distancia (km)</label>
+                            <input type="number" id="result-distance" placeholder="180">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="result-time">Tiempo Total</label>
+                        <input type="text" id="result-time" placeholder="1:45:32">
+                    </div>
+                    <div class="form-group">
+                        <label for="result-highlights">Destacados (separados por coma)</label>
+                        <input type="text" id="result-highlights" placeholder="Pole Position, Vuelta Rápida">
+                        <small>Ej: Pole Position, Vuelta Rápida, Mejor Vuelta</small>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn-secondary" onclick="closeModal('result-modal')">
+                            Cancelar
+                        </button>
+                        <button type="submit" class="btn-primary">
+                            <i class="fas fa-save"></i>
+                            <span id="result-submit-text">Guardar Resultado</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
     <div id="success-toast" class="toast success">
         <i class="fas fa-check-circle"></i>
         <span id="success-message">Operación exitosa</span>
     </div>
 
-    <!-- Error Toast -->
     <div id="error-toast" class="toast error">
         <i class="fas fa-exclamation-circle"></i>
         <span id="error-message">Error en la operación</span>
     </div>
 
-    <script src="../script.js"></script>
     <script src="admin.js"></script>
 </body>
 </html>

@@ -1,31 +1,47 @@
-// Admin Panel JavaScript
-
-// Global variables
-let currentEditingNews = null
+// Admin Panel Design-Only JavaScript
+// This file contains only UI/UX functionality without real data manipulation
 
 // Initialize admin panel
 document.addEventListener("DOMContentLoaded", () => {
-  initializeAdmin()
-  loadAllData()
+  initializeDesignElements()
+  initializeFormHandlers()
 })
 
-function initializeAdmin() {
-  // Initialize form handlers
-  document.getElementById("video-form").addEventListener("submit", handleVideoSubmit)
-  document.getElementById("photo-form").addEventListener("submit", handlePhotoSubmit)
-  document.getElementById("news-form").addEventListener("submit", handleNewsSubmit)
+function initializeDesignElements() {
+  // Add smooth transitions and animations
+  addSmoothTransitions()
 
-  // Auto-save functionality
-  if (localStorage.getItem("autoSave") !== "false") {
-    setInterval(autoSave, 30000) // Auto-save every 30 seconds
-  }
+  // Initialize tooltips
+  initializeTooltips()
+
+  // Add loading states simulation
+  simulateLoadingStates()
+}
+
+function initializeFormHandlers() {
+  // Add form submission handlers (design only)
+  const forms = ["video-form", "photo-form", "news-form", "race-form", "result-form"]
+
+  forms.forEach((formId) => {
+    const form = document.getElementById(formId)
+    if (form) {
+      form.addEventListener("submit", function (e) {
+        e.preventDefault()
+        showSaveToast()
+        closeModal(this.closest(".admin-modal").id)
+      })
+    }
+  })
 }
 
 // Section Navigation
 function showSection(sectionName) {
-  // Hide all sections
+  // Hide all sections with fade effect
   document.querySelectorAll(".admin-section").forEach((section) => {
-    section.classList.remove("active")
+    section.style.opacity = "0"
+    setTimeout(() => {
+      section.classList.remove("active")
+    }, 150)
   })
 
   // Remove active class from all tabs
@@ -33,468 +49,56 @@ function showSection(sectionName) {
     tab.classList.remove("active")
   })
 
-  // Show selected section
-  document.getElementById(sectionName + "-section").classList.add("active")
+  // Show selected section with fade effect
+  setTimeout(() => {
+    const targetSection = document.getElementById(sectionName + "-section")
+    targetSection.classList.add("active")
+    targetSection.style.opacity = "1"
+  }, 150)
 
   // Add active class to clicked tab
   event.target.classList.add("active")
+
+  // Add ripple effect to tab
+  addRippleEffect(event.target)
 }
 
 // Modal Functions
-function openVideoModal() {
-  document.getElementById("video-modal").classList.add("active")
-  document.getElementById("video-form").reset()
-}
-
-function openPhotoModal() {
-  document.getElementById("photo-modal").classList.add("active")
-  document.getElementById("photo-form").reset()
-}
-
-function openNewsModal(newsId = null) {
-  const modal = document.getElementById("news-modal")
-  const form = document.getElementById("news-form")
-
-  if (newsId) {
-    // Edit mode
-    const news = getNewsById(newsId)
-    if (news) {
-      document.getElementById("news-modal-title").textContent = "Editar Noticia"
-      document.getElementById("news-submit-text").textContent = "Actualizar Noticia"
-      document.getElementById("news-id").value = newsId
-      document.getElementById("news-title").value = news.title
-      document.getElementById("news-category-select").value = news.category
-      document.getElementById("news-image").value = news.image
-      document.getElementById("news-excerpt").value = news.excerpt
-      document.getElementById("news-content").value = news.content
-      document.getElementById("news-author").value = news.author
-      document.getElementById("news-tags").value = news.tags.join(", ")
-      currentEditingNews = newsId
-    }
-  } else {
-    // Add mode
-    document.getElementById("news-modal-title").textContent = "Agregar Noticia"
-    document.getElementById("news-submit-text").textContent = "Guardar Noticia"
-    form.reset()
-    document.getElementById("news-author").value = "Equipo de Prensa"
-    currentEditingNews = null
-  }
-
+function openModal(modalId) {
+  const modal = document.getElementById(modalId)
   modal.classList.add("active")
+
+  // Add entrance animation
+  const modalContainer = modal.querySelector(".modal-container")
+  modalContainer.style.transform = "scale(0.9) translateY(-20px)"
+  modalContainer.style.opacity = "0"
+
+  setTimeout(() => {
+    modalContainer.style.transform = "scale(1) translateY(0)"
+    modalContainer.style.opacity = "1"
+  }, 10)
+
+  // Focus first input
+  setTimeout(() => {
+    const firstInput = modal.querySelector("input, textarea, select")
+    if (firstInput) firstInput.focus()
+  }, 300)
 }
 
 function closeModal(modalId) {
-  document.getElementById(modalId).classList.remove("active")
-  currentEditingNews = null
-}
+  const modal = document.getElementById(modalId)
+  const modalContainer = modal.querySelector(".modal-container")
 
-// Video Management
-function handleVideoSubmit(e) {
-  e.preventDefault()
+  // Add exit animation
+  modalContainer.style.transform = "scale(0.9) translateY(-20px)"
+  modalContainer.style.opacity = "0"
 
-  const videoData = {
-    id: Date.now().toString(),
-    url: document.getElementById("video-url").value,
-    title: document.getElementById("video-title").value,
-    description: document.getElementById("video-description").value,
-    category: document.getElementById("video-category").value,
-    embedId: extractYouTubeId(document.getElementById("video-url").value),
-    dateAdded: new Date().toISOString(),
-  }
-
-  if (!videoData.embedId) {
-    showToast("error", "URL de YouTube inválida")
-    return
-  }
-
-  addVideo(videoData)
-  closeModal("video-modal")
-  loadVideos()
-  showToast("success", "Video agregado exitosamente")
-}
-
-function extractYouTubeId(url) {
-  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/
-  const match = url.match(regExp)
-  return match && match[2].length === 11 ? match[2] : null
-}
-
-function addVideo(videoData) {
-  const videos = JSON.parse(localStorage.getItem("pilotVideos") || "[]")
-  videos.push(videoData)
-  localStorage.setItem("pilotVideos", JSON.stringify(videos))
-}
-
-function deleteVideo(videoId) {
-  if (confirm("¿Estás seguro de que quieres eliminar este video?")) {
-    let videos = JSON.parse(localStorage.getItem("pilotVideos") || "[]")
-    videos = videos.filter((video) => video.id !== videoId)
-    localStorage.setItem("pilotVideos", JSON.stringify(videos))
-    loadVideos()
-    showToast("success", "Video eliminado exitosamente")
-  }
-}
-
-function loadVideos() {
-  const videos = JSON.parse(localStorage.getItem("pilotVideos") || "[]")
-  const container = document.getElementById("videos-list")
-
-  if (videos.length === 0) {
-    container.innerHTML = `
-            <div class="empty-state">
-                <i class="fas fa-video"></i>
-                <h4>No hay videos</h4>
-                <p>Agrega tu primer video de YouTube</p>
-            </div>
-        `
-    return
-  }
-
-  container.innerHTML = videos
-    .map(
-      (video) => `
-        <div class="media-item">
-            <div class="media-thumbnail">
-                <img src="https://img.youtube.com/vi/${video.embedId}/maxresdefault.jpg" alt="${video.title}">
-                <div class="media-overlay">
-                    <button class="btn-icon" onclick="previewVideo('${video.embedId}')">
-                        <i class="fas fa-play"></i>
-                    </button>
-                    <button class="btn-icon btn-danger" onclick="deleteVideo('${video.id}')">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </div>
-            </div>
-            <div class="media-info">
-                <h4>${video.title}</h4>
-                <span class="media-category">${video.category}</span>
-                <p>${video.description}</p>
-            </div>
-        </div>
-    `,
-    )
-    .join("")
-}
-
-// Photo Management
-function handlePhotoSubmit(e) {
-  e.preventDefault()
-
-  const photoData = {
-    id: Date.now().toString(),
-    url: document.getElementById("photo-url").value,
-    title: document.getElementById("photo-title").value,
-    description: document.getElementById("photo-description").value,
-    category: document.getElementById("photo-category").value,
-    dateAdded: new Date().toISOString(),
-  }
-
-  addPhoto(photoData)
-  closeModal("photo-modal")
-  loadPhotos()
-  showToast("success", "Foto agregada exitosamente")
-}
-
-function addPhoto(photoData) {
-  const photos = JSON.parse(localStorage.getItem("pilotPhotos") || "[]")
-  photos.push(photoData)
-  localStorage.setItem("pilotPhotos", JSON.stringify(photos))
-}
-
-function deletePhoto(photoId) {
-  if (confirm("¿Estás seguro de que quieres eliminar esta foto?")) {
-    let photos = JSON.parse(localStorage.getItem("pilotPhotos") || "[]")
-    photos = photos.filter((photo) => photo.id !== photoId)
-    localStorage.setItem("pilotPhotos", JSON.stringify(photos))
-    loadPhotos()
-    showToast("success", "Foto eliminada exitosamente")
-  }
-}
-
-function loadPhotos() {
-  const photos = JSON.parse(localStorage.getItem("pilotPhotos") || "[]")
-  const container = document.getElementById("photos-list")
-
-  if (photos.length === 0) {
-    container.innerHTML = `
-            <div class="empty-state">
-                <i class="fas fa-images"></i>
-                <h4>No hay fotos</h4>
-                <p>Agrega tu primera foto</p>
-            </div>
-        `
-    return
-  }
-
-  container.innerHTML = photos
-    .map(
-      (photo) => `
-        <div class="media-item">
-            <div class="media-thumbnail">
-                <img src="${photo.url}" alt="${photo.title}" onerror="this.src='/placeholder.svg?height=200&width=300'">
-                <div class="media-overlay">
-                    <button class="btn-icon" onclick="previewPhoto('${photo.url}', '${photo.title}')">
-                        <i class="fas fa-eye"></i>
-                    </button>
-                    <button class="btn-icon btn-danger" onclick="deletePhoto('${photo.id}')">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </div>
-            </div>
-            <div class="media-info">
-                <h4>${photo.title}</h4>
-                <span class="media-category">${photo.category}</span>
-                <p>${photo.description}</p>
-            </div>
-        </div>
-    `,
-    )
-    .join("")
-}
-
-// News Management
-function handleNewsSubmit(e) {
-  e.preventDefault()
-
-  const newsId = document.getElementById("news-id").value
-  const newsData = {
-    id: newsId || Date.now().toString(),
-    title: document.getElementById("news-title").value,
-    category: document.getElementById("news-category-select").value,
-    image: document.getElementById("news-image").value,
-    excerpt: document.getElementById("news-excerpt").value,
-    content: document.getElementById("news-content").value,
-    author: document.getElementById("news-author").value,
-    tags: document
-      .getElementById("news-tags")
-      .value.split(",")
-      .map((tag) => tag.trim())
-      .filter((tag) => tag),
-    date: newsId
-      ? getNewsById(newsId).date
-      : new Date().toLocaleDateString("es-ES", {
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-        }),
-    dateAdded: newsId ? getNewsById(newsId).dateAdded : new Date().toISOString(),
-  }
-
-  if (newsId) {
-    updateNews(newsData)
-    showToast("success", "Noticia actualizada exitosamente")
-  } else {
-    addNews(newsData)
-    showToast("success", "Noticia agregada exitosamente")
-  }
-
-  closeModal("news-modal")
-  loadNews()
-}
-
-function addNews(newsData) {
-  const news = JSON.parse(localStorage.getItem("pilotNews") || "[]")
-  news.unshift(newsData) // Add to beginning
-  localStorage.setItem("pilotNews", JSON.stringify(news))
-}
-
-function updateNews(newsData) {
-  const news = JSON.parse(localStorage.getItem("pilotNews") || "[]")
-  const index = news.findIndex((item) => item.id === newsData.id)
-  if (index !== -1) {
-    news[index] = newsData
-    localStorage.setItem("pilotNews", JSON.stringify(news))
-  }
-}
-
-function deleteNews(newsId) {
-  if (confirm("¿Estás seguro de que quieres eliminar esta noticia?")) {
-    let news = JSON.parse(localStorage.getItem("pilotNews") || "[]")
-    news = news.filter((item) => item.id !== newsId)
-    localStorage.setItem("pilotNews", JSON.stringify(news))
-    loadNews()
-    showToast("success", "Noticia eliminada exitosamente")
-  }
-}
-
-function getNewsById(newsId) {
-  const news = JSON.parse(localStorage.getItem("pilotNews") || "[]")
-  return news.find((item) => item.id === newsId)
-}
-
-function loadNews() {
-  const news = JSON.parse(localStorage.getItem("pilotNews") || "[]")
-  const container = document.getElementById("news-list")
-
-  if (news.length === 0) {
-    container.innerHTML = `
-            <div class="empty-state">
-                <i class="fas fa-newspaper"></i>
-                <h4>No hay noticias</h4>
-                <p>Agrega tu primera noticia</p>
-            </div>
-        `
-    return
-  }
-
-  container.innerHTML = news
-    .map(
-      (item) => `
-        <div class="news-admin-item">
-            <div class="news-admin-image">
-                <img src="${item.image}" alt="${item.title}" onerror="this.src='/placeholder.svg?height=150&width=200'">
-                <span class="news-admin-category">${item.category}</span>
-            </div>
-            <div class="news-admin-content">
-                <h4>${item.title}</h4>
-                <p>${item.excerpt}</p>
-                <div class="news-admin-meta">
-                    <span><i class="fas fa-calendar"></i> ${item.date}</span>
-                    <span><i class="fas fa-user"></i> ${item.author}</span>
-                </div>
-                <div class="news-admin-tags">
-                    ${item.tags.map((tag) => `<span class="tag">${tag}</span>`).join("")}
-                </div>
-            </div>
-            <div class="news-admin-actions">
-                <button class="btn-icon" onclick="openNewsModal('${item.id}')" title="Editar">
-                    <i class="fas fa-edit"></i>
-                </button>
-                <button class="btn-icon btn-danger" onclick="deleteNews('${item.id}')" title="Eliminar">
-                    <i class="fas fa-trash"></i>
-                </button>
-            </div>
-        </div>
-    `,
-    )
-    .join("")
-}
-
-// Preview Functions
-function previewVideo(embedId) {
-  const modal = document.createElement("div")
-  modal.className = "preview-modal"
-  modal.innerHTML = `
-        <div class="modal-backdrop" onclick="this.parentElement.remove()"></div>
-        <div class="modal-container">
-            <div class="modal-header">
-                <h3>Vista Previa del Video</h3>
-                <button class="modal-close" onclick="this.closest('.preview-modal').remove()">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-content">
-                <div class="video-container">
-                    <iframe src="https://www.youtube.com/embed/${embedId}" frameborder="0" allowfullscreen></iframe>
-                </div>
-            </div>
-        </div>
-    `
-  document.body.appendChild(modal)
-  modal.classList.add("active")
-}
-
-function previewPhoto(url, title) {
-  const modal = document.createElement("div")
-  modal.className = "preview-modal"
-  modal.innerHTML = `
-        <div class="modal-backdrop" onclick="this.parentElement.remove()"></div>
-        <div class="modal-container">
-            <div class="modal-header">
-                <h3>${title}</h3>
-                <button class="modal-close" onclick="this.closest('.preview-modal').remove()">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-content">
-                <img src="${url}" alt="${title}" style="max-width: 100%; height: auto;">
-            </div>
-        </div>
-    `
-  document.body.appendChild(modal)
-  modal.classList.add("active")
-}
-
-// Data Management
-function loadAllData() {
-  loadVideos()
-  loadPhotos()
-  loadNews()
-  loadPilotInfo()
-}
-
-function loadPilotInfo() {
-  const pilotInfo = JSON.parse(localStorage.getItem("pilotInfo") || "{}")
-  const pilotStats = JSON.parse(localStorage.getItem("pilotStats") || "{}")
-
-  // Load pilot info
-  if (pilotInfo.name) document.getElementById("pilot-name").value = pilotInfo.name
-  if (pilotInfo.age) document.getElementById("pilot-age").value = pilotInfo.age
-  if (pilotInfo.bio) document.getElementById("pilot-bio").value = pilotInfo.bio
-
-  // Load pilot stats
-  if (pilotStats.victories) document.getElementById("victories").value = pilotStats.victories
-  if (pilotStats.podiums) document.getElementById("podiums").value = pilotStats.podiums
-  if (pilotStats.seasons) document.getElementById("seasons").value = pilotStats.seasons
-  if (pilotStats.debutYear) document.getElementById("debut-year").value = pilotStats.debutYear
-}
-
-function saveAllData() {
-  // Save pilot info
-  const pilotInfo = {
-    name: document.getElementById("pilot-name").value,
-    age: document.getElementById("pilot-age").value,
-    bio: document.getElementById("pilot-bio").value,
-  }
-  localStorage.setItem("pilotInfo", JSON.stringify(pilotInfo))
-
-  // Save pilot stats
-  const pilotStats = {
-    victories: document.getElementById("victories").value,
-    podiums: document.getElementById("podiums").value,
-    seasons: document.getElementById("seasons").value,
-    debutYear: document.getElementById("debut-year").value,
-  }
-  localStorage.setItem("pilotStats", JSON.stringify(pilotStats))
-
-  showToast("success", "Todos los datos guardados exitosamente")
-}
-
-function autoSave() {
-  saveAllData()
-  console.log("Auto-save completed")
-}
-
-function clearAllData() {
-  if (confirm("¿Estás seguro de que quieres eliminar TODOS los datos? Esta acción no se puede deshacer.")) {
-    localStorage.removeItem("pilotVideos")
-    localStorage.removeItem("pilotPhotos")
-    localStorage.removeItem("pilotNews")
-    localStorage.removeItem("pilotInfo")
-    localStorage.removeItem("pilotStats")
-
-    loadAllData()
-    showToast("success", "Todos los datos han sido eliminados")
-  }
-}
-
-function resetToDefaults() {
-  if (confirm("¿Estás seguro de que quieres restaurar los valores por defecto?")) {
-    clearAllData()
-
-    // Set default values
-    document.getElementById("pilot-name").value = "Nico Rivas"
-    document.getElementById("pilot-age").value = "21"
-    document.getElementById("pilot-bio").value =
-      "Piloto profesional de Trucks México Series desde 2018. Conquistando pistas mexicanas con pasión, determinación y excelencia deportiva."
-    document.getElementById("victories").value = "3"
-    document.getElementById("podiums").value = "11"
-    document.getElementById("seasons").value = "6"
-    document.getElementById("debut-year").value = "2018"
-
-    saveAllData()
-    showToast("success", "Valores por defecto restaurados")
-  }
+  setTimeout(() => {
+    modal.classList.remove("active")
+    // Reset form
+    const form = modal.querySelector("form")
+    if (form) form.reset()
+  }, 200)
 }
 
 // Toast Notifications
@@ -505,34 +109,233 @@ function showToast(type, message) {
   messageElement.textContent = message
   toast.classList.add("show")
 
+  // Auto hide after 3 seconds
   setTimeout(() => {
     toast.classList.remove("show")
   }, 3000)
 }
 
-// Export data for main site
-function getMultimediaData() {
-  return {
-    videos: JSON.parse(localStorage.getItem("pilotVideos") || "[]"),
-    photos: JSON.parse(localStorage.getItem("pilotPhotos") || "[]"),
-    news: JSON.parse(localStorage.getItem("pilotNews") || "[]"),
-    pilotInfo: JSON.parse(localStorage.getItem("pilotInfo") || "{}"),
-    pilotStats: JSON.parse(localStorage.getItem("pilotStats") || "{}"),
+// Predefined toast functions for design demo
+function showSaveToast() {
+  showToast("success", "Cambios guardados exitosamente")
+}
+
+function showDeleteToast() {
+  showToast("error", "Elemento eliminado")
+}
+
+function showPreviewToast() {
+  showToast("success", "Abriendo vista previa...")
+}
+
+// Visual Effects
+function addRippleEffect(element) {
+  const ripple = document.createElement("span")
+  ripple.classList.add("ripple")
+  ripple.style.position = "absolute"
+  ripple.style.borderRadius = "50%"
+  ripple.style.background = "rgba(255, 255, 255, 0.3)"
+  ripple.style.transform = "scale(0)"
+  ripple.style.animation = "ripple 0.6s linear"
+  ripple.style.left = "50%"
+  ripple.style.top = "50%"
+  ripple.style.width = "20px"
+  ripple.style.height = "20px"
+  ripple.style.marginLeft = "-10px"
+  ripple.style.marginTop = "-10px"
+
+  element.style.position = "relative"
+  element.appendChild(ripple)
+
+  setTimeout(() => {
+    ripple.remove()
+  }, 600)
+}
+
+function addSmoothTransitions() {
+  // Add CSS for ripple animation
+  const style = document.createElement("style")
+  style.textContent = `
+    @keyframes ripple {
+      to {
+        transform: scale(4);
+        opacity: 0;
+      }
+    }
+    
+    .admin-section {
+      transition: opacity 0.3s ease;
+    }
+    
+    .modal-container {
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    
+    .media-item:hover {
+      transform: translateY(-4px);
+      transition: transform 0.3s ease;
+    }
+    
+    .btn-icon:hover {
+      transform: scale(1.1);
+      transition: transform 0.2s ease;
+    }
+    
+    .admin-card:hover {
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+      transition: box-shadow 0.3s ease;
+    }
+  `
+  document.head.appendChild(style)
+}
+
+function initializeTooltips() {
+  // Simple tooltip implementation
+  document.querySelectorAll("[title]").forEach((element) => {
+    element.addEventListener("mouseenter", showTooltip)
+    element.addEventListener("mouseleave", hideTooltip)
+  })
+}
+
+function showTooltip(event) {
+  const tooltip = document.createElement("div")
+  tooltip.className = "tooltip"
+  tooltip.textContent = event.target.getAttribute("title")
+  tooltip.style.cssText = `
+    position: absolute;
+    background: #333;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    z-index: 9999;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  `
+
+  document.body.appendChild(tooltip)
+
+  const rect = event.target.getBoundingClientRect()
+  tooltip.style.left = rect.left + rect.width / 2 - tooltip.offsetWidth / 2 + "px"
+  tooltip.style.top = rect.top - tooltip.offsetHeight - 8 + "px"
+
+  setTimeout(() => {
+    tooltip.style.opacity = "1"
+  }, 10)
+
+  event.target._tooltip = tooltip
+}
+
+function hideTooltip(event) {
+  if (event.target._tooltip) {
+    event.target._tooltip.style.opacity = "0"
+    setTimeout(() => {
+      if (event.target._tooltip) {
+        event.target._tooltip.remove()
+        delete event.target._tooltip
+      }
+    }, 300)
   }
 }
 
-// Make functions available globally
+function simulateLoadingStates() {
+  // Add loading animation to buttons when clicked
+  document.querySelectorAll(".btn-primary, .btn-secondary").forEach((button) => {
+    button.addEventListener("click", function () {
+      if (this.classList.contains("loading")) return
+
+      const originalText = this.innerHTML
+      this.classList.add("loading")
+      this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Procesando...'
+      this.disabled = true
+
+      setTimeout(() => {
+        this.innerHTML = originalText
+        this.classList.remove("loading")
+        this.disabled = false
+      }, 1500)
+    })
+  })
+}
+
+// Form validation visual feedback
+function addFormValidation() {
+  document.querySelectorAll("input, textarea, select").forEach((field) => {
+    field.addEventListener("blur", function () {
+      if (this.hasAttribute("required") && !this.value.trim()) {
+        this.style.borderColor = "#ef4444"
+        this.style.boxShadow = "0 0 0 2px rgba(239, 68, 68, 0.2)"
+      } else {
+        this.style.borderColor = "#4ade80"
+        this.style.boxShadow = "0 0 0 2px rgba(74, 222, 128, 0.2)"
+      }
+    })
+
+    field.addEventListener("focus", function () {
+      this.style.borderColor = "#4ade80"
+      this.style.boxShadow = "0 0 0 2px rgba(74, 222, 128, 0.2)"
+    })
+  })
+}
+
+// Initialize form validation
+document.addEventListener("DOMContentLoaded", () => {
+  addFormValidation()
+})
+
+// Keyboard shortcuts
+document.addEventListener("keydown", (event) => {
+  // Escape to close modals
+  if (event.key === "Escape") {
+    document.querySelectorAll(".admin-modal.active").forEach((modal) => {
+      closeModal(modal.id)
+    })
+  }
+
+  // Ctrl+S to save
+  if (event.ctrlKey && event.key === "s") {
+    event.preventDefault()
+    showSaveToast()
+  }
+})
+
+// Auto-resize textareas
+document.querySelectorAll("textarea").forEach((textarea) => {
+  textarea.addEventListener("input", function () {
+    this.style.height = "auto"
+    this.style.height = this.scrollHeight + "px"
+  })
+})
+
+// Card animations on scroll
+function initializeScrollAnimations() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = "1"
+        entry.target.style.transform = "translateY(0)"
+      }
+    })
+  })
+
+  document.querySelectorAll(".admin-card").forEach((card) => {
+    card.style.opacity = "0"
+    card.style.transform = "translateY(20px)"
+    card.style.transition = "opacity 0.6s ease, transform 0.6s ease"
+    observer.observe(card)
+  })
+}
+
+// Initialize all design features
+document.addEventListener("DOMContentLoaded", () => {
+  initializeScrollAnimations()
+})
+
+// Export functions for global access
 window.showSection = showSection
-window.openVideoModal = openVideoModal
-window.openPhotoModal = openPhotoModal
-window.openNewsModal = openNewsModal
+window.openModal = openModal
 window.closeModal = closeModal
-window.deleteVideo = deleteVideo
-window.deletePhoto = deletePhoto
-window.deleteNews = deleteNews
-window.previewVideo = previewVideo
-window.previewPhoto = previewPhoto
-window.saveAllData = saveAllData
-window.clearAllData = clearAllData
-window.resetToDefaults = resetToDefaults
-window.getMultimediaData = getMultimediaData
+window.showSaveToast = showSaveToast
+window.showDeleteToast = showDeleteToast
+window.showPreviewToast = showPreviewToast
