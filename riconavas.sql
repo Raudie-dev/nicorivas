@@ -11,7 +11,7 @@
  Target Server Version : 100432 (10.4.32-MariaDB)
  File Encoding         : 65001
 
- Date: 26/06/2025 11:29:10
+ Date: 26/06/2025 19:07:47
 */
 
 SET NAMES utf8mb4;
@@ -150,13 +150,14 @@ CREATE TABLE `news`  (
   INDEX `idx_news_category`(`category` ASC) USING BTREE,
   INDEX `idx_news_published`(`published` ASC) USING BTREE,
   INDEX `idx_news_created_at`(`created_at` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of news
 -- ----------------------------
-INSERT INTO `news` VALUES (4, 'asd', 'asd', 'asd', 'http://localhost/nicorivas/admin/uploads/news/news_4_685c1051927836.23052334.gif', 'Victoria', 'Equipo de Prensa', '[\"asd\"]', 0, '2025-06-25 10:56:48', '2025-06-25 11:14:07', 'https://www.youtube.com/watch?v=3KlmcX9rWoQ', '3KlmcX9rWoQ');
-INSERT INTO `news` VALUES (5, 'asd', 'asd', 'asd', 'uploads/news/news_5_685d5a4c3bb0d9.46109925.png', 'Victoria', 'Equipo de Prensa', '[\"tag1\"]', 0, '2025-06-26 10:33:48', '2025-06-26 10:33:48', 'https://www.youtube.com/watch?v=BY41k184qqo&list=RDT3BRHQchJME&index=10', 'BY41k184qqo');
+INSERT INTO `news` VALUES (7, 'Gran Victoria en la Carrera de Monterrey', 'Nico Rivas logra su primera victoria de la temporada en una carrera emocionante.', 'En una carrera llena de adrenalina y competencia intensa, Nico Rivas cruzó la meta en primer lugar demostrando su gran talento y preparación. Este triunfo marca un antes y un después en su carrera deportiva y eleva las expectativas para las próximas fechas.', 'uploads/news/news_7_685dcd15f2bdd3.99847929.png', 'Victoria', 'Equipo de Prensa', '[\"Triunfo\",\"Temporada 2024\",\"Monterrey\"]', 0, '2025-06-26 18:25:09', '2025-06-26 18:43:33', 'https://www.youtube.com/watch?v=BY41k184qqo&list=RDT3BRHQchJME&index=10', 'BY41k184qqo');
+INSERT INTO `news` VALUES (8, 'Gran Victoria en la Carrera de Monterrey', 'Nico Rivas logra su primera victoria de la temporada en una carrera emocionante.', 'En una carrera llena de adrenalina y competencia intensa, Nico Rivas cruzó la meta en primer lugar demostrando su gran talento y preparación. Este triunfo marca un antes y un después en su carrera deportiva y eleva las expectativas para las próximas fechas.', 'uploads/news/news_8_685dcd2cdae528.98248384.webp', 'Victoria', 'Equipo de Prensa', '[\"Triunfo\",\"Temporada 2024\",\"Monterrey\"]', 0, '2025-06-26 18:37:59', '2025-06-26 18:54:20', NULL, NULL);
+INSERT INTO `news` VALUES (9, 'Gran Victoria en la Carrera de Monterrey', 'Nico Rivas logra su primera victoria de la temporada en una carrera emocionante.', 'En una carrera llena de adrenalina y competencia intensa, Nico Rivas cruzó la meta en primer lugar demostrando su gran talento y preparación. Este triunfo marca un antes y un después en su carrera deportiva y eleva las expectativas para las próximas fechas.', '', 'Victoria', 'Equipo de Prensa', '[\"Triunfo\",\"Temporada 2024\",\"Monterrey\"]', 0, '2025-06-26 18:38:00', '2025-06-26 18:48:30', 'https://www.youtube.com/watch?v=BY41k184qqo&list=RDT3BRHQchJME&index=10', 'BY41k184qqo');
 
 -- ----------------------------
 -- Table structure for password_reset_tokens
@@ -187,12 +188,13 @@ CREATE TABLE `photos`  (
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_photos_category`(`category` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 14 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of photos
 -- ----------------------------
-INSERT INTO `photos` VALUES (11, 'asd', 'asd', 'uploads/photos/photo_685d5a6c183710.45909334.png', 'carrera', '2025-06-26 10:34:20', '2025-06-26 10:34:20');
+INSERT INTO `photos` VALUES (12, 'asd', 'asdasd', 'uploads/photos/photo_685dc48849d099.10189029.png', 'carrera', '2025-06-26 18:07:04', '2025-06-26 18:07:04');
+INSERT INTO `photos` VALUES (13, 'asdasd', 'asdasdasd', 'uploads/photos/photo_685dc490438467.77548488.png', 'podio', '2025-06-26 18:07:12', '2025-06-26 18:07:12');
 
 -- ----------------------------
 -- Table structure for pilot_info
@@ -211,7 +213,7 @@ CREATE TABLE `pilot_info`  (
 -- ----------------------------
 -- Records of pilot_info
 -- ----------------------------
-INSERT INTO `pilot_info` VALUES (1, 'Nico Rivas', 21, 'Desde los 12 años, las pistas han sido mi segundo hogar. Lo que comenzó como una pasión en el kartismo se ha convertido en una carrera profesional llena de logros y desafíos.', '2025-06-24 18:39:06', '2025-06-25 11:33:40');
+INSERT INTO `pilot_info` VALUES (1, 'Nico Rivas', 21, 'Desde los 12 años, las pistas han sido mi segundo hogar. Lo que comenzó como una pasión en el kartismo se ha convertido en una carrera profesional llena de logros y desafíos.', '2025-06-24 18:39:06', '2025-06-26 14:06:29');
 
 -- ----------------------------
 -- Table structure for pilot_stats
@@ -231,7 +233,7 @@ CREATE TABLE `pilot_stats`  (
 -- ----------------------------
 -- Records of pilot_stats
 -- ----------------------------
-INSERT INTO `pilot_stats` VALUES (1, 3, 11, 6, 2018, '2025-06-24 18:39:06', '2025-06-25 11:35:21');
+INSERT INTO `pilot_stats` VALUES (1, 7, 8, 13, 2018, '2025-06-24 18:39:06', '2025-06-26 14:06:01');
 
 -- ----------------------------
 -- Table structure for race_results
@@ -345,7 +347,7 @@ CREATE TABLE `site_config`  (
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `config_key`(`config_key` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 88 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 151 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of site_config
@@ -353,12 +355,12 @@ CREATE TABLE `site_config`  (
 INSERT INTO `site_config` VALUES (1, 'maintenance_mode', 'false', 'Modo de mantenimiento del sitio', '2025-06-24 18:39:06', '2025-06-24 18:39:06');
 INSERT INTO `site_config` VALUES (2, 'email_notifications', 'true', 'Notificaciones por email', '2025-06-24 18:39:06', '2025-06-24 18:39:06');
 INSERT INTO `site_config` VALUES (3, 'auto_save', 'true', 'Guardado automático', '2025-06-24 18:39:06', '2025-06-24 18:39:06');
-INSERT INTO `site_config` VALUES (4, 'site_title', 'Nico Rivas', NULL, '2025-06-24 20:58:43', '2025-06-25 11:33:17');
-INSERT INTO `site_config` VALUES (5, 'site_description', 'Piloto profesional de Trucks México Series desde 2018. Conquistando pistas mexicanas con pasión, determinación y excelencia deportiva.', NULL, '2025-06-24 20:58:43', '2025-06-25 11:33:17');
+INSERT INTO `site_config` VALUES (4, 'site_title', 'Nico Rivas', NULL, '2025-06-24 20:58:43', '2025-06-26 15:06:05');
+INSERT INTO `site_config` VALUES (5, 'site_description', 'Piloto profesional de Trucks México Series desde 2018. Conquistando pistas mexicanas con pasión, determinación y excelencia deportiva.', NULL, '2025-06-24 20:58:43', '2025-06-26 15:06:05');
 INSERT INTO `site_config` VALUES (6, 'contact_email', 'contacto@riconavas.com', NULL, '2025-06-24 20:58:43', '2025-06-24 20:58:43');
-INSERT INTO `site_config` VALUES (7, 'social_facebook', '', NULL, '2025-06-24 20:58:43', '2025-06-24 20:58:43');
-INSERT INTO `site_config` VALUES (8, 'social_twitter', '', NULL, '2025-06-24 20:58:43', '2025-06-24 20:58:43');
-INSERT INTO `site_config` VALUES (9, 'social_instagram', '', NULL, '2025-06-24 20:58:43', '2025-06-24 20:58:43');
+INSERT INTO `site_config` VALUES (7, 'social_facebook', 'https://www.facebook.com/nicorivas24?mibextid=LQQJ4d', NULL, '2025-06-24 20:58:43', '2025-06-26 13:28:39');
+INSERT INTO `site_config` VALUES (8, 'social_twitter', 'https://www.tiktok.com/@nicorz24?_t=8lQFZNnWgas&_r=1', NULL, '2025-06-24 20:58:43', '2025-06-26 13:28:39');
+INSERT INTO `site_config` VALUES (9, 'social_instagram', 'https://www.instagram.com/nicorivasracing?igsh=b2ZoMW5zM294eXkx&utm_source=qr', NULL, '2025-06-24 20:58:43', '2025-06-26 13:28:39');
 INSERT INTO `site_config` VALUES (10, 'social_youtube', '', NULL, '2025-06-24 20:58:43', '2025-06-24 20:58:43');
 
 -- ----------------------------
@@ -396,11 +398,13 @@ CREATE TABLE `videos`  (
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_videos_category`(`category` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of videos
 -- ----------------------------
-INSERT INTO `videos` VALUES (2, 'asd', 'asd', 'https://www.youtube.com/watch?v=3KlmcX9rWoQ', '3KlmcX9rWoQ', 'entrenamiento', '2025-06-25 09:59:00', '2025-06-25 09:59:00');
+INSERT INTO `videos` VALUES (3, 'asd', 'asd', 'https://www.youtube.com/watch?v=RNonfByE9xc', 'RNonfByE9xc', 'carrera', '2025-06-26 18:04:28', '2025-06-26 18:04:28');
+INSERT INTO `videos` VALUES (4, 'asd', 'asd', 'https://www.youtube.com/watch?v=RNonfByE9xc', 'RNonfByE9xc', 'carrera', '2025-06-26 18:06:40', '2025-06-26 18:06:40');
+INSERT INTO `videos` VALUES (5, 'asdasd', 'asd', 'https://www.youtube.com/watch?v=RNonfByE9xc', 'RNonfByE9xc', 'carrera', '2025-06-26 18:06:46', '2025-06-26 18:06:46');
 
 SET FOREIGN_KEY_CHECKS = 1;
