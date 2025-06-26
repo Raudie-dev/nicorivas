@@ -47,7 +47,7 @@
         <div class="container">
             <div class="page-hero-content">
                 <h1>Próximas Carreras</h1>
-                <p>Calendario de competencias y resultados de la temporada 2024</p>
+                <p>Calendario de competencias y resultados de la temporada <?= date('Y') ?></p>
             </div>
         </div>
     </section>
@@ -57,7 +57,7 @@
         <div class="container">
             <div class="overview-content">
                 <div class="overview-text">
-                    <h2>Temporada 2024</h2>
+                    <h2>Temporada <?= date('Y') ?></h2>
                     <p class="lead">Una temporada llena de desafíos y oportunidades para demostrar el talento mexicano en las pistas más exigentes del país.</p>
                     
                     <div class="season-highlights">
@@ -110,9 +110,9 @@
     <!-- Upcoming Races -->
     <section class="upcoming-races">
         <div class="container">
-            <div class="section-header">
+            <div id="calendario" class="section-header">
                 <h2>Próximas Carreras</h2>
-                <p>Calendario de competencias 2024</p>
+                <p>Calendario de competencias <?= date('Y') ?></p>
             </div>
             
             <div class="races-timeline">
@@ -404,63 +404,9 @@
     </section>
 
     <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-main">
-                    <div class="footer-logo">
-                        <div class="logo-symbol">NR</div>
-                        <div class="logo-text">
-                            <span class="logo-name">NICO</span>
-                            <span class="logo-surname">RIVAS</span>
-                        </div>
-                    </div>
-                    <p>Piloto profesional de Trucks México Series. Representando el talento mexicano en las pistas más importantes del país.</p>
-                    
-                    <div class="social-links">
-                        <a href="#" class="social-link">
-                            <i class="fab fa-instagram"></i>
-                        </a>
-                        <a href="#" class="social-link">
-                            <i class="fab fa-facebook"></i>
-                        </a>
-                        <a href="#" class="social-link">
-                            <i class="fab fa-twitter"></i>
-                        </a>
-                        <a href="#" class="social-link">
-                            <i class="fab fa-youtube"></i>
-                        </a>
-                    </div>
-                </div>
-                
-                <div class="footer-links">
-                    <div class="footer-column">
-                        <h4>Navegación</h4>
-                        <ul>
-                            <li><a href="index.php">Home</a></li>
-                            <li><a href="patrocinadores.php">Patrocinadores</a></li>
-                            <li><a href="carreras.php">Próximas Carreras</a></li>
-                            <li><a href="contacto.php">Contáctanos</a></li>
-                        </ul>
-                    </div>
-                    
-                    <div class="footer-column">
-                        <h4>Información</h4>
-                        <ul>
-                            <li><a href="#about">Mi Historia</a></li>
-                            <li><a href="#">Prensa</a></li>
-                            <li><a href="#">Galería</a></li>
-                            <li><a href="#">Calendario</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="footer-bottom">
-                <p>&copy; 2024 Nico Rivas. Todos los derechos reservados.</p>
-            </div>
-        </div>
-    </footer>
+    <?php
+    include 'footer.php'
+    ?>
 
     <!-- News Modal -->
     <div id="newsModal" class="modal">

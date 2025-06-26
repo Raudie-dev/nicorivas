@@ -1194,6 +1194,8 @@ async function deleteResult(resultId) {
   }
 }
 
+// ==================== SEASON STAT MANAGEMENT ====================
+
 async function handleSeasonStatsSubmit(e) {
   e.preventDefault();
 

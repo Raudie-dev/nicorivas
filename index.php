@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +9,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 </head>
+
 <body>
     <!-- Navigation -->
     <nav class="navbar" id="navbar">
@@ -16,16 +18,16 @@
                 <a href="index.php" class="nav-link">HOME</a>
                 <a href="patrocinadores.php" class="nav-link">PATROCINADORES</a>
             </div>
-            
+
             <div class="nav-logo">
                 <img src="img/NR24-6-ok.png" alt="logo Nico Rivas" class="nav-logo-img">
             </div>
-            
+
             <div class="nav-right">
                 <a href="carreras.php" class="nav-link">PRÓXIMAS CARRERAS</a>
                 <a href="contacto.php" class="nav-link">CONTÁCTANOS</a>
             </div>
-            
+
             <div class="hamburger" id="hamburger">
                 <span class="bar"></span>
                 <span class="bar"></span>
@@ -51,19 +53,19 @@
             </video>
             <div class="video-overlay"></div>
         </div>
-        
+
         <div class="hero-content">
-             <div class="hero-logo">
+            <div class="hero-logo">
                 <img src="img/blanco-png-300x236.png" alt="logo">
             </div>
-            
-            <h1 class="hero-title">Nico Rivas</h1>
+
+            <h1 id="site-title" class="hero-title">Nico Rivas</h1>
             <p class="hero-subtitle">Piloto</p>
-            
+
             <div class="hero-description">
-                <p>Piloto profesional de Trucks México Series desde 2018. Conquistando pistas mexicanas con pasión, determinación y excelencia deportiva.</p>
+                <p id="site-description">Piloto profesional de Trucks México Series desde 2018. Conquistando pistas mexicanas con pasión, determinación y excelencia deportiva.</p>
             </div>
-            
+
             <div class="hero-stats">
                 <div class="stat-item">
                     <div class="stat-number">3</div>
@@ -78,13 +80,13 @@
                     <div class="stat-label">Temporadas</div>
                 </div>
             </div>
-            
+
             <div class="hero-actions">
                 <a href="#about" class="btn-primary">Conoce mi historia</a>
                 <a href="carreras.php" class="btn-secondary">Ver carreras</a>
             </div>
         </div>
-        
+
         <div class="scroll-indicator">
             <div class="scroll-arrow">
                 <i class="fas fa-chevron-down"></i>
@@ -98,8 +100,8 @@
             <div class="about-content">
                 <div class="about-text">
                     <h2>Mi Historia</h2>
-                    <p class="lead">Desde los 12 años, las pistas han sido mi segundo hogar. Lo que comenzó como una pasión en el kartismo se ha convertido en una carrera profesional llena de logros y desafíos.</p>
-                    
+                    <p id="pilot-bio" class="lead">Desde los 12 años, las pistas han sido mi segundo hogar. Lo que comenzó como una pasión en el kartismo se ha convertido en una carrera profesional llena de logros y desafíos.</p>
+
                     <div class="journey-points">
                         <div class="journey-item">
                             <div class="journey-year">2018</div>
@@ -108,7 +110,7 @@
                                 <p>A los 15 años debuto en Trucks México Series</p>
                             </div>
                         </div>
-                        
+
                         <div class="journey-item">
                             <div class="journey-year">2022</div>
                             <div class="journey-text">
@@ -116,9 +118,11 @@
                                 <p>Histórico triunfo en Puebla el 17 de julio</p>
                             </div>
                         </div>
-                        
+
                         <div class="journey-item">
-                            <div class="journey-year">2024</div>
+                            <div class="journey-year">
+                                <?php echo date('Y'); ?>
+                            </div>
                             <div class="journey-text">
                                 <h4>Temporada Actual</h4>
                                 <p>Continuando la búsqueda de la excelencia</p>
@@ -126,7 +130,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="about-visual">
                     <div class="image-container">
                         <img src="img/A7400831-scaled.jpg" alt="Nico Rivas en pista">
@@ -142,17 +146,13 @@
     </section>
 
     <!-- Multimedia Section -->
-    <section class="multimedia-section section">
+    <section id="multimedia" class="multimedia-section section">
         <div class="container">
             <div class="section-header">
-                <div class="section-badge">
-                    <i class="fas fa-photo-video"></i>
-                    Multimedia
-                </div>
                 <h2>Galería y Videos</h2>
                 <p>Revive los mejores momentos de la carrera de Nico Rivas</p>
             </div>
-            
+
             <div class="multimedia-tabs">
                 <button class="multimedia-tab active" onclick="showMultimediaTab('videos')">
                     <i class="fas fa-video"></i>
@@ -163,7 +163,7 @@
                     Fotos
                 </button>
             </div>
-            
+
             <!-- Videos Tab -->
             <div id="videos-tab" class="multimedia-content active">
                 <div id="videos-gallery" class="multimedia-grid">
@@ -195,44 +195,51 @@
                 <h2>Logros Destacados</h2>
                 <p>Números que reflejan dedicación y talento</p>
             </div>
-            
+
             <div class="achievements-grid">
                 <div class="achievement-card">
                     <div class="achievement-icon">
                         <i class="fas fa-trophy"></i>
                     </div>
                     <div class="achievement-content">
-                        <h3>3 Victorias</h3>
+                        <h3>
+                            <span id="pilot-victories">3</span> Victorias
+                        </h3>
                         <p>En Trucks México Series</p>
                     </div>
                 </div>
-                
+
                 <div class="achievement-card">
                     <div class="achievement-icon">
                         <i class="fas fa-medal"></i>
                     </div>
                     <div class="achievement-content">
-                        <h3>11 Podios</h3>
+                        <h3>
+                            <span id="pilot-podiums">11</span> Podios
+                        </h3>
                         <p>Consistencia en resultados</p>
                     </div>
                 </div>
-                
+
                 <div class="achievement-card">
                     <div class="achievement-icon">
                         <i class="fas fa-flag-checkered"></i>
                     </div>
                     <div class="achievement-content">
-                        <h3>6 Temporadas</h3>
+                        <h3>
+                            <span id="pilot-seasons">6</span> Temporadas</h3>
                         <p>De experiencia profesional</p>
                     </div>
                 </div>
-                
+
                 <div class="achievement-card">
                     <div class="achievement-icon">
                         <i class="fas fa-calendar"></i>
                     </div>
                     <div class="achievement-content">
-                        <h3>Desde 2018</h3>
+                        <h3>
+                            Desde <span id="pilot-debut">2018</span>
+                        </h3>
                         <p>Trayectoria profesional</p>
                     </div>
                 </div>
@@ -247,7 +254,7 @@
                 <h2>Últimas Noticias</h2>
                 <p>Mantente al día con las últimas actualizaciones</p>
             </div>
-            
+
             <div class="news-grid">
                 <article class="news-card featured">
                     <div class="news-image">
@@ -262,7 +269,7 @@
                         </div>
                     </div>
                 </article>
-                
+
                 <article class="news-card">
                     <div class="news-image">
                         <img src="/placeholder.svg?height=200&width=350" alt="Preparación temporada">
@@ -276,7 +283,7 @@
                         </div>
                     </div>
                 </article>
-                
+
                 <article class="news-card">
                     <div class="news-image">
                         <img src="/placeholder.svg?height=200&width=350" alt="Nuevo patrocinador">
@@ -291,7 +298,7 @@
                     </div>
                 </article>
             </div>
-            
+
             <!-- News CTA Button -->
             <div class="news-cta">
                 <a href="carreras.php#noticias" class="btn-primary">
@@ -317,64 +324,9 @@
     </section>
 
     <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-main">
-                    <div class="footer-logo">
-                        <div class="logo-symbol">NR</div>
-                        <div class="logo-text">
-                            <span class="logo-name">NICO</span>
-                            <span class="logo-surname">RIVAS</span>
-                        </div>
-                    </div>
-                    <p>Piloto profesional de Trucks México Series. Representando el talento mexicano en las pistas más importantes del país.</p>
-                    
-                    <div class="social-links">
-                        <a href="#" class="social-link">
-                            <i class="fab fa-instagram"></i>
-                        </a>
-                        <a href="#" class="social-link">
-                            <i class="fab fa-facebook"></i>
-                        </a>
-                        <a href="#" class="social-link">
-                            <i class="fab fa-twitter"></i>
-                        </a>
-                        <a href="#" class="social-link">
-                            <i class="fab fa-youtube"></i>
-                        </a>
-                    </div>
-                </div>
-                
-                <div class="footer-links">
-                    <div class="footer-column">
-                        <h4>Navegación</h4>
-                        <ul>
-                            <li><a href="index.php">Home</a></li>
-                            <li><a href="patrocinadores.php">Patrocinadores</a></li>
-                            <li><a href="carreras.php">Próximas Carreras</a></li>
-                            <li><a href="contacto.php">Contáctanos</a></li>
-                        </ul>
-                    </div>
-                    
-                    <div class="footer-column">
-                        <h4>Información</h4>
-                        <ul>
-                            <li><a href="#about">Mi Historia</a></li>
-                            <li><a href="#">Prensa</a></li>
-                            <li><a href="#">Galería</a></li>
-                            <li><a href="#">Calendario</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="footer-bottom">
-                <p>&copy; 2024 Nico Rivas. Todos los derechos reservados.</p>
-            </div>
-        </div>
-    </footer>
-
+    <?php
+    include 'footer.php'
+    ?>
     <!-- Video Modal -->
     <div id="videoModal" class="modal">
         <div class="modal-content">
@@ -388,4 +340,5 @@
 
     <script src="script.js"></script>
 </body>
+
 </html>

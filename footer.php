@@ -9,19 +9,19 @@
                             <span class="logo-surname">RIVAS</span>
                         </div>
                     </div>
-                    <p>Piloto profesional de Trucks México Series. Representando el talento mexicano en las pistas más importantes del país.</p>
+                    <p id="site-description-footer">Piloto profesional de Trucks México Series. Representando el talento mexicano en las pistas más importantes del país.</p>
                     
                     <div class="social-links">
-                        <a href="#" class="social-link">
+                        <a id="social-instagram" class="social-instagram social-link" target="_blank">
                             <i class="fab fa-instagram"></i>
                         </a>
-                        <a href="#" class="social-link">
+                        <a id="social-facebook" class="social-facebook social-link" target="_blank">
                             <i class="fab fa-facebook"></i>
                         </a>
-                        <a href="#" class="social-link">
-                            <i class="fab fa-twitter"></i>
+                        <a id="social-twitter"  class="social-twitter social-link" target="_blank">
+                            <i class="fab fa-tiktok"></i>
                         </a>
-                        <a href="#" class="social-link">
+                        <a id="social-youtube"  class="social-youtube social-link" target="_blank">
                             <i class="fab fa-youtube"></i>
                         </a>
                     </div>
@@ -41,10 +41,10 @@
                     <div class="footer-column">
                         <h4>Información</h4>
                         <ul>
-                            <li><a href="#about">Mi Historia</a></li>
-                            <li><a href="#">Prensa</a></li>
-                            <li><a href="#">Galería</a></li>
-                            <li><a href="#">Calendario</a></li>
+                            <li><a href="index.php#about">Mi Historia</a></li>
+                            <li><a href="carreras.php#noticias">Noticias</a></li>
+                            <li><a href="index.php#multimedia">Galería</a></li>
+                            <li><a href="carreras.php#calendario">Calendario</a></li>
                         </ul>
                     </div>
                 </div>

@@ -506,8 +506,8 @@ try {
                                     <input type="url" id="config-social-facebook" placeholder="https://facebook.com/nicorivas">
                                 </div>
                                 <div class="form-group">
-                                    <label for="config-social-twitter">Twitter</label>
-                                    <input type="url" id="config-social-twitter" placeholder="https://twitter.com/nicorivas">
+                                    <label for="config-social-twitter">Tiktok</label>
+                                    <input type="url" id="config-social-twitter" placeholder="https://tiktok.com/nicorivas">
                                 </div>
                             </div>
                             <div class="form-row">
