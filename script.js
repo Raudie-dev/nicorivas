@@ -390,30 +390,31 @@ function closeVideoModal() {
 }
 
 // Multimedia tab functionality (design only)
-function showMultimediaTab(tabName) {
-  // Remove active class from all tabs
-  document.querySelectorAll(".multimedia-tab").forEach((tab) => {
-    tab.classList.remove("active");
-  });
+function showMultimediaTab(tab) {
+  const videoTab = document.getElementById("videos-tab");
+  const photoTab = document.getElementById("photos-tab");
 
-  // Remove active class from all content
-  document.querySelectorAll(".multimedia-content").forEach((content) => {
-    content.classList.remove("active");
-  });
+  const buttons = document.querySelectorAll(".multimedia-tab");
 
-  // Add active class to clicked tab
-  event.target.classList.add("active");
-
-  // Show corresponding content with animation
-  const targetContent = document.getElementById(tabName + "-tab");
-  if (targetContent) {
-    targetContent.style.opacity = "0";
-    targetContent.classList.add("active");
-
-    setTimeout(() => {
-      targetContent.style.opacity = "1";
-    }, 50);
+  // Activar contenido
+  if (tab === "videos") {
+    videoTab.classList.add("active");
+    photoTab.classList.remove("active");
+  } else {
+    photoTab.classList.add("active");
+    videoTab.classList.remove("active");
   }
+
+  // Activar botón correcto
+  buttons.forEach((btn) => {
+    if (
+      btn.textContent.trim().includes(tab === "videos" ? "Videos" : "Fotos")
+    ) {
+      btn.classList.add("active");
+    } else {
+      btn.classList.remove("active");
+    }
+  });
 }
 
 // Visual effects
@@ -802,7 +803,7 @@ async function apiRequest(endpoint, options = {}) {
   }
 }
 
-// ==================== VIDEO MANAGEMENT ====================
+// ==================== MULTIMEDIA MANAGEMENT ====================
 
 async function loadVideos() {
   try {
@@ -828,14 +829,9 @@ async function loadVideos() {
         <div class="media-item">
           <div class="media-thumbnail">
             <img src="https://img.youtube.com/vi/${video.embed_id}/maxresdefault.jpg" alt="${video.title}">
-            <div class="media-overlay">
-              <button class="btn-icon" onclick="previewVideo('${video.embed_id}')">
-                <i class="fas fa-play"></i>
-              </button>
-              <button class="btn-icon btn-danger" onclick="deleteVideo('${video.id}')">
-                <i class="fas fa-trash"></i>
-              </button>
-            </div>
+            <button class="preview-button" onclick="previewVideo('${video.embed_id}')">
+              <i class="fas fa-play"></i>
+            </button>
           </div>
           <div class="media-info">
             <h4>${video.title}</h4>
@@ -868,20 +864,19 @@ function previewVideo(embedId) {
 
   content.innerHTML = `
     <div class="video-preview">
-      <iframe
-        src="https://www.youtube.com/embed/${embedId}"
-        frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen
-        style="width:100%; height:100%; min-height:300px;"
-      ></iframe>
+      <div class="video-wrapper">
+        <iframe
+          src="https://www.youtube.com/embed/${embedId}?autoplay=1"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+        ></iframe>
+      </div>
     </div>
   `;
 
   modal.classList.add("active");
 }
-
-// ==================== PHOTO MANAGEMENT ====================
 
 async function loadPhotos() {
   try {
@@ -906,15 +901,10 @@ async function loadPhotos() {
         (photo) => `
         <div class="media-item">
           <div class="media-thumbnail">
-            <img src="${photo.url}" alt="${photo.title}" onerror="this.src='/placeholder.svg?height=200&width=300'">
-            <div class="media-overlay">
-              <button class="btn-icon" onclick="previewPhoto('${photo.url}', '${photo.title}')">
-                <i class="fas fa-eye"></i>
-              </button>
-              <button class="btn-icon btn-danger" onclick="deletePhoto('${photo.id}')">
-                <i class="fas fa-trash"></i>
-              </button>
-            </div>
+            <img src="admin/${photo.url}" alt="${photo.title}" onerror="this.src='/placeholder.svg?height=200&width=300'">
+            <button class="preview-button" onclick="previewPhoto('${photo.url}', '${photo.title}')">
+              <i class="fas fa-search"></i>
+            </button>
           </div>
           <div class="media-info">
             <h4>${photo.title}</h4>
@@ -936,6 +926,32 @@ async function loadPhotos() {
         </div>
       `;
     }
+  }
+}
+
+function previewPhoto(url, title = "") {
+  const modal = document.getElementById("preview-modal");
+  const content = document.getElementById("preview-modal-content");
+
+  if (!modal || !content) return;
+
+  content.innerHTML = `
+    <div class="photo-preview">
+      <img src="admin/${url}" alt="${title}" style="max-width: 100%; border-radius: 8px;">
+      <h4 style="margin-top: 1rem;">${title}</h4>
+    </div>
+  `;
+
+  modal.classList.add("active");
+}
+
+function closePreviewModal() {
+  const modal = document.getElementById("preview-modal");
+  const content = document.getElementById("preview-modal-content");
+
+  if (modal && content) {
+    modal.classList.remove("active");
+    content.innerHTML = ""; // Elimina el iframe y detiene el video
   }
 }
 
@@ -1038,6 +1054,257 @@ async function loadNews() {
         <p>Intenta recargar la página</p>
       </div>
     `;
+  }
+}
+
+async function showNewsModal(id) {
+  const modal = document.getElementById("news-modal");
+  const content = document.getElementById("news-modal-content");
+  if (!modal || !content) return;
+
+  // Mostrar loading state
+  content.innerHTML = `
+    <div class="news-loading">
+      <div class="loading-spinner"></div>
+      <p>Cargando noticia...</p>
+    </div>
+  `;
+  modal.classList.add("active");
+
+  try {
+    const items = await apiRequest("news");
+    const item = items.find((n) => n.id == id);
+    if (!item) return;
+
+    const hasImage = Boolean(item.image);
+    const hasVideo = Boolean(item.video && item.embed_id);
+    const imgSrc = hasImage
+      ? `admin/${item.image}`
+      : "/placeholder.svg?height=350&width=700";
+
+    const createVideoEmbed = (embedId) => `
+      <div class="news-video-container">
+        <div class="news-video">
+          <iframe
+            src="https://www.youtube.com/embed/${embedId}?modestbranding=1&rel=0"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+          ></iframe>
+        </div>
+      </div>
+    `;
+
+    const createImageBlock = (src, alt, className = "") => `
+      <div class="${className}">
+        <img src="${src}" alt="${alt}" loading="lazy" />
+        <div class="image-overlay"></div>
+      </div>
+    `;
+
+    let mediaHeader = "";
+    let mediaContent = "";
+
+    if (hasImage && hasVideo) {
+      mediaHeader = createImageBlock(imgSrc, item.title, "news-header-image");
+      mediaContent = createVideoEmbed(item.embed_id);
+    } else if (hasImage) {
+      mediaHeader = createImageBlock(imgSrc, item.title, "news-header-image");
+      mediaContent = createImageBlock(imgSrc, item.title, "news-body-image");
+    } else if (hasVideo) {
+      mediaHeader = createVideoEmbed(item.embed_id);
+      mediaContent = "";
+    } else {
+      mediaHeader = createImageBlock(
+        "/placeholder.svg?height=350&width=700",
+        "Sin contenido",
+        "news-header-image news-placeholder"
+      );
+      mediaContent = "";
+    }
+
+    const tagsHtml = (item.tags || [])
+      .map((t) => `<span class="news-tag">${t}</span>`)
+      .join("");
+
+    const readingTime = Math.ceil((item.content?.length || 0) / 1000) || 1;
+
+    content.innerHTML = `
+      <button class="news-modal-close" onclick="closeNewsModal()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+      
+      ${mediaHeader}
+      
+      <div class="news-modal-body">
+        <div class="news-header-info">
+          <div class="news-meta-top">
+            <span class="news-date">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+              </svg>
+              ${formatDate(item.created_at)}
+            </span>
+            <span class="news-reading-time">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12,6 12,12 16,14"></polyline>
+              </svg>
+              ${readingTime} min de lectura
+            </span>
+          </div>
+          
+          ${
+            tagsHtml ? `<div class="news-tags-container">${tagsHtml}</div>` : ""
+          }
+        </div>
+
+        <h1 class="news-title">${item.title}</h1>
+        
+        ${
+          item.excerpt && item.excerpt !== item.content
+            ? `<p class="news-excerpt">${item.excerpt}</p>`
+            : ""
+        }
+        
+        <div class="news-content">
+          <p>${item.content || item.excerpt || "Contenido no disponible"}</p>
+        </div>
+        
+        ${mediaContent}
+        
+        <div class="news-actions">
+          <button class="news-action-btn share-btn" onclick="shareNews('${
+            item.title
+          }')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
+              <polyline points="16,6 12,2 8,6"></polyline>
+              <line x1="12" y1="2" x2="12" y2="15"></line>
+            </svg>
+            Compartir
+          </button>
+        </div>
+      </div>
+    `;
+
+    // Añadir animación de entrada
+    setTimeout(() => {
+      content.classList.add("news-modal-loaded");
+    }, 50);
+  } catch (error) {
+    content.innerHTML = `
+      <div class="news-error">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="15" y1="9" x2="9" y2="15"></line>
+          <line x1="9" y1="9" x2="15" y2="15"></line>
+        </svg>
+        <h3>Error al cargar</h3>
+        <p>No se pudo cargar la noticia. Inténtalo de nuevo.</p>
+        <button class="retry-btn" onclick="showNewsModal(${id})">Reintentar</button>
+      </div>
+    `;
+  }
+}
+
+// Funciones auxiliares
+function closeNewsModal() {
+  const modal = document.getElementById("news-modal");
+  if (modal) {
+    modal.classList.remove("active");
+  }
+}
+
+function shareNews(title) {
+  if (navigator.share) {
+    navigator.share({
+      title: title,
+      url: window.location.href,
+    });
+  } else {
+    // Fallback para navegadores que no soportan Web Share API
+    navigator.clipboard.writeText(window.location.href);
+    // Aquí podrías mostrar un toast de confirmación
+  }
+}
+
+function bookmarkNews(id) {
+  // Implementar lógica de guardado
+  console.log("Guardando noticia:", id);
+  // Aquí podrías cambiar el ícono o mostrar confirmación
+}
+
+async function loadPublicNews() {
+  const container = document.querySelector(".news-grid");
+  if (!container) return;
+
+  try {
+    const items = await apiRequest("news");
+    const latestNews = items
+      .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+      .slice(0, 3); // Solo las 3 más recientes
+
+    if (!latestNews.length) {
+      container.innerHTML = `
+        <div class="empty-state">
+          <i class="fas fa-newspaper"></i>
+          <h4>No hay noticias</h4>
+          <p>Pronto se publicarán novedades.</p>
+        </div>`;
+      return;
+    }
+
+    container.innerHTML = latestNews
+      .map((item, index) => {
+        const imgSrc = item.image
+          ? `admin/${item.image}`
+          : item.embed_id
+          ? `https://img.youtube.com/vi/${item.embed_id}/hqdefault.jpg`
+          : "/placeholder.svg?height=200&width=350";
+        const cat = item.category || "General";
+        const date = formatDate(item.created_at);
+
+        return `
+    <article class="news-card ${
+      index === 0 ? "featured" : ""
+    }" onclick="showNewsModal(${item.id})">
+      <div class="news-image">
+        <img src="${imgSrc}" alt="${item.title}" />
+        <div class="news-category">${cat}</div>
+      </div>
+      <div class="news-content">
+        <h3>${item.title}</h3>
+        <p>${item.excerpt}</p>
+        <div class="news-meta">
+          <span class="news-date">${date}</span>
+        </div>
+      </div>
+    </article>`;
+      })
+      .join("");
+  } catch (error) {
+    container.innerHTML = `
+      <div class="error-state">
+        <i class="fas fa-exclamation-triangle"></i>
+        <h4>Error al cargar noticias</h4>
+        <p>Intenta recargar la página.</p>
+      </div>`;
+  }
+}
+
+function closeNewsModal() {
+  const modal = document.getElementById("news-modal");
+  const content = document.getElementById("news-modal-content");
+  if (modal && content) {
+    modal.classList.remove("active");
+    content.innerHTML = "";
   }
 }
 
@@ -1545,4 +1812,6 @@ document.addEventListener("DOMContentLoaded", () => {
   loadVideos();
   loadPhotos();
   loadPilotStats();
+  loadPublicNews();
+  loadNews();
 });

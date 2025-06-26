@@ -166,7 +166,7 @@
 
             <!-- Videos Tab -->
             <div id="videos-tab" class="multimedia-content active">
-                <div id="videos-gallery" class="multimedia-grid">
+                <div id="videos-list" class="multimedia-grid">
                     <div class="multimedia-empty">
                         <i class="fas fa-video"></i>
                         <h3>Videos Próximamente</h3>
@@ -177,7 +177,7 @@
 
             <!-- Photos Tab -->
             <div id="photos-tab" class="multimedia-content">
-                <div id="photos-gallery" class="multimedia-grid">
+                <div id="photos-list" class="multimedia-grid">
                     <div class="multimedia-empty">
                         <i class="fas fa-images"></i>
                         <h3>Fotos Próximamente</h3>
@@ -187,7 +187,13 @@
             </div>
         </div>
     </section>
-
+    <!-- Modal de Vista Previa -->
+    <div id="preview-modal" class="preview-modal">
+        <div id="preview-modal-content" class="preview-modal-content"></div>
+        <button class="preview-modal-close" onclick="closePreviewModal()">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
     <!-- Achievements Section -->
     <section class="achievements-section">
         <div class="container">
@@ -227,7 +233,8 @@
                     </div>
                     <div class="achievement-content">
                         <h3>
-                            <span id="pilot-seasons">6</span> Temporadas</h3>
+                            <span id="pilot-seasons">6</span> Temporadas
+                        </h3>
                         <p>De experiencia profesional</p>
                     </div>
                 </div>
@@ -308,7 +315,9 @@
             </div>
         </div>
     </section>
-
+    <div id="news-modal" class="preview-modal">
+        <div id="news-modal-content" class="preview-modal-content"></div>
+    </div>
     <!-- CTA Section -->
     <section class="cta-section">
         <div class="container">
