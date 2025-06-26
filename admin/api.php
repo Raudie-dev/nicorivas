@@ -385,8 +385,28 @@ function handleNews($db, $method, $id)
             if (!$id) {
                 return jsonResponse(['error' => 'ID requerido'], 400);
             }
+
+            // Obtener la imagen asociada
+            $stmt = $db->prepare("SELECT image FROM news WHERE id = ?");
+            $stmt->execute([$id]);
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if (!$row) {
+                return jsonResponse(['error' => 'Noticia no encontrada'], 404);
+            }
+
+            // Eliminar el archivo de imagen si existe
+            if (!empty($row['image'])) {
+                $imagePath = __DIR__ . '/' . $row['image']; // Asume que $row['image'] es algo como "uploads/news/imagen.jpg"
+                if (file_exists($imagePath)) {
+                    unlink($imagePath);
+                }
+            }
+
+            // Eliminar la noticia
             $stmt = $db->prepare("DELETE FROM news WHERE id = ?");
             $stmt->execute([$id]);
+
             return jsonResponse(['message' => 'Noticia eliminada']);
     }
 }
@@ -527,8 +547,6 @@ function handleConfig($db, $method)
             break;
     }
 }
-
-
 
 // Manejo de carreras
 function handleRaces($db, $method, $id)
@@ -933,9 +951,6 @@ function handleCurrentUser($db)
         'email' => $user['email']
     ]);
 }
-
-
-
 
 // Funciones auxiliares
 function jsonResponse($data, $status = 200)
