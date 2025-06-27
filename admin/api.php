@@ -411,8 +411,6 @@ function handleNews($db, $method, $id)
     }
 }
 
-
-
 // Manejo de información del piloto
 function handlePilotInfo($db, $method)
 {

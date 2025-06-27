@@ -3859,12 +3859,19 @@ input:checked + .slider:before {
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  height: 350px;
+  background-color: #f7f7f7; /* fondo neutro para rellenar */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .news-body-image img {
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: contain;
 }
+
 
 /* Acciones */
 .news-actions {

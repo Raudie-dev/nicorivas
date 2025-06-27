@@ -1057,6 +1057,65 @@ async function loadNews() {
   }
 }
 
+async function loadAllPublicNews() {
+  const container = document.querySelector(".all-news-grid");
+  if (!container) return;
+
+  try {
+    const items = await apiRequest("news");
+
+    if (!items.length) {
+      container.innerHTML = `
+        <div class="empty-state">
+          <i class="fas fa-newspaper"></i>
+          <h4>No hay noticias</h4>
+          <p>Pronto se publicarán novedades.</p>
+        </div>`;
+      return;
+    }
+
+    container.innerHTML = items
+      .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+      .map((item) => {
+        const imgSrc = item.image
+          ? `admin/${item.image}`
+          : item.embed_id
+          ? `https://img.youtube.com/vi/${item.embed_id}/hqdefault.jpg`
+          : "/placeholder.svg?height=200&width=350";
+
+        const cat = item.category || "General";
+        const date = formatDate(item.created_at);
+        const excerpt = item.excerpt || "Sin resumen";
+        const title = item.title || "Sin título";
+        const author = item.author ? `Por: ${item.author}` : "";
+
+        return `
+          <article class="news-card clickable" onclick="showNewsModal(${item.id})">
+            <div class="news-image">
+              <img src="${imgSrc}" alt="${title}">
+              <div class="news-category">${cat}</div>
+            </div>
+            <div class="news-content">
+              <h3>${title}</h3>
+              <p>${excerpt}</p>
+              <div class="news-meta">
+                <span class="news-date">${date}</span>
+                <span class="news-author">${author}</span>
+              </div>
+            </div>
+          </article>`;
+      })
+      .join("");
+  } catch (error) {
+    container.innerHTML = `
+      <div class="error-state">
+        <i class="fas fa-exclamation-triangle"></i>
+        <h4>Error al cargar noticias</h4>
+        <p>Intenta recargar la página.</p>
+      </div>`;
+  }
+}
+
 async function showNewsModal(id) {
   const modal = document.getElementById("news-modal");
   const content = document.getElementById("news-modal-content");
@@ -1078,9 +1137,7 @@ async function showNewsModal(id) {
 
     const hasImage = Boolean(item.image);
     const hasVideo = Boolean(item.video && item.embed_id);
-    const imgSrc = hasImage
-      ? `admin/${item.image}`
-      : "/placeholder.svg?height=350&width=700";
+    const imgSrc = hasImage ? `admin/${item.image}` : "";
 
     const createVideoEmbed = (embedId) => `
       <div class="news-video-container">
@@ -1102,25 +1159,16 @@ async function showNewsModal(id) {
       </div>
     `;
 
-    let mediaHeader = "";
     let mediaContent = "";
 
     if (hasImage && hasVideo) {
-      mediaHeader = createImageBlock(imgSrc, item.title, "news-header-image");
-      mediaContent = createVideoEmbed(item.embed_id);
+      mediaContent =
+        createImageBlock(imgSrc, item.title, "news-body-image") +
+        createVideoEmbed(item.embed_id);
     } else if (hasImage) {
-      mediaHeader = createImageBlock(imgSrc, item.title, "news-header-image");
       mediaContent = createImageBlock(imgSrc, item.title, "news-body-image");
     } else if (hasVideo) {
-      mediaHeader = createVideoEmbed(item.embed_id);
-      mediaContent = "";
-    } else {
-      mediaHeader = createImageBlock(
-        "/placeholder.svg?height=350&width=700",
-        "Sin contenido",
-        "news-header-image news-placeholder"
-      );
-      mediaContent = "";
+      mediaContent = createVideoEmbed(item.embed_id);
     }
 
     const tagsHtml = (item.tags || [])
@@ -1136,9 +1184,7 @@ async function showNewsModal(id) {
           <line x1="6" y1="6" x2="18" y2="18"></line>
         </svg>
       </button>
-      
-      ${mediaHeader}
-      
+
       <div class="news-modal-body">
         <div class="news-header-info">
           <div class="news-meta-top">
@@ -1159,26 +1205,25 @@ async function showNewsModal(id) {
               ${readingTime} min de lectura
             </span>
           </div>
-          
           ${
             tagsHtml ? `<div class="news-tags-container">${tagsHtml}</div>` : ""
           }
         </div>
 
         <h1 class="news-title">${item.title}</h1>
-        
+
         ${
           item.excerpt && item.excerpt !== item.content
             ? `<p class="news-excerpt">${item.excerpt}</p>`
             : ""
         }
-        
+
         <div class="news-content">
           <p>${item.content || item.excerpt || "Contenido no disponible"}</p>
         </div>
-        
+
         ${mediaContent}
-        
+
         <div class="news-actions">
           <button class="news-action-btn share-btn" onclick="shareNews('${
             item.title
@@ -1194,7 +1239,6 @@ async function showNewsModal(id) {
       </div>
     `;
 
-    // Añadir animación de entrada
     setTimeout(() => {
       content.classList.add("news-modal-loaded");
     }, 50);
@@ -1214,7 +1258,6 @@ async function showNewsModal(id) {
   }
 }
 
-// Funciones auxiliares
 function closeNewsModal() {
   const modal = document.getElementById("news-modal");
   if (modal) {
@@ -1451,6 +1494,104 @@ async function loadCompletedRaces() {
   }
 }
 
+async function loadPublicUpcomingRaces() {
+  const container = document.getElementById("upcoming-races-list");
+  if (!container) return;
+
+  try {
+    const races = await apiRequest("races", { type: "upcoming" });
+
+    if (!Array.isArray(races) || races.length === 0) {
+      container.innerHTML = `
+        <div class="empty-state">
+          <i class="fas fa-calendar-times"></i>
+          <h4>No hay carreras programadas</h4>
+          <p>Muy pronto anunciaremos nuevas fechas</p>
+        </div>
+      `;
+      return;
+    }
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Para comparar sin hora
+
+    // ✅ Filtrar, ordenar y limitar
+    const upcoming = races
+      .filter((r) => new Date(r.date) >= today)
+      .sort((a, b) => new Date(a.date) - new Date(b.date))
+      .slice(0, 10); // Máximo 10
+
+    if (upcoming.length === 0) {
+      container.innerHTML = `
+        <div class="empty-state">
+          <i class="fas fa-calendar-check"></i>
+          <h4>No hay carreras futuras</h4>
+          <p>Por ahora no hay fechas confirmadas a partir de hoy</p>
+        </div>
+      `;
+      return;
+    }
+
+    container.innerHTML = upcoming
+      .map((race) => {
+        const date = new Date(race.date);
+        const day = String(date.getDate()).padStart(2, "0");
+        const month = getMonthName(date.getMonth());
+        const year = date.getFullYear();
+        const time = formatTime(date);
+
+        return `
+          <div class="race-card upcoming ${race.is_next ? "next" : ""}">
+            ${
+              race.is_next
+                ? `<div class="race-status-badge">Próxima Carrera</div>`
+                : ""
+            }
+            <div class="race-date">
+              <div class="date-day">${day}</div>
+              <div class="date-month">${month}</div>
+              <div class="date-year">${year}</div>
+            </div>
+            <div class="race-info">
+              <h3>${race.name}</h3>
+              <div class="race-details">
+                <div class="detail-item">
+                  <i class="fas fa-map-marker-alt"></i>
+                  <span>${race.location}</span>
+                </div>
+                <div class="detail-item">
+                  <i class="fas fa-clock"></i>
+                  <span>${time}</span>
+                </div>
+                ${
+                  race.broadcast
+                    ? `<div class="detail-item">
+                         <i class="fas fa-tv"></i>
+                         <span>${race.broadcast}</span>
+                       </div>`
+                    : ""
+                }
+              </div>
+            </div>
+            <div class="race-actions">
+              <a href="#" class="btn-secondary">Ver detalles</a>
+            </div>
+          </div>
+        `;
+      })
+      .join("");
+  } catch (error) {
+    console.error("Error al cargar las próximas carreras:", error);
+    container.innerHTML = `
+      <div class="error-state">
+        <i class="fas fa-exclamation-triangle"></i>
+        <h4>Error al cargar carreras</h4>
+        <p>Intenta recargar la página</p>
+      </div>
+    `;
+  }
+}
+
 async function loadRaceResults() {
   const container = document.getElementById("race-results-list");
   if (!container) return;
@@ -1458,70 +1599,59 @@ async function loadRaceResults() {
   try {
     const results = await apiRequest("race-results");
 
-    if (results.length === 0) {
+    if (!Array.isArray(results) || results.length === 0) {
       container.innerHTML = `
         <div class="empty-state">
           <i class="fas fa-trophy"></i>
           <h4>No hay resultados</h4>
-          <p>Agrega los resultados de las carreras</p>
+          <p>Muy pronto se publicarán los resultados de las últimas carreras</p>
         </div>
       `;
       return;
     }
 
-    container.innerHTML = results
+    // ✅ Ordenar por fecha descendente y tomar solo los 3 más recientes
+    const latestResults = results
+      .sort((a, b) => new Date(b.date) - new Date(a.date))
+      .slice(0, 3);
+
+    container.innerHTML = latestResults
       .map((result) => {
-        const positionClass = getPositionClass(result.position);
-        const highlightTags = result.highlights
+        const date = new Date(result.date);
+        const formattedDate = formatLongDate(date); // Ej: 28 Febrero 2024
+        const positionClass = getPositionClass(result.position); // victory, podium, points
+
+        const highlights = (result.highlights || [])
           .map((h) => `<span class="highlight-tag">${h}</span>`)
           .join("");
 
         return `
-          <div class="result-admin-item ${positionClass}">
+          <div class="result-card ${positionClass}">
             <div class="result-position">
               <div class="position-number">${result.position}°</div>
-              <div class="position-label">${getPositionLabel(
-                result.position
-              )}</div>
+              <div class="position-label">${getPositionLabel(result.position)}</div>
             </div>
             <div class="result-info">
-              <h4>${result.race_name}</h4>
-              <div class="result-details">
-                <span><i class="fas fa-calendar"></i> ${formatDate(
-                  new Date(result.date)
-                )}</span>
-                <span><i class="fas fa-map-marker-alt"></i> ${
-                  result.location
-                }</span>
-                ${
-                  result.time
-                    ? `<span><i class="fas fa-clock"></i> ${result.time}</span>`
-                    : ""
-                }
+              <h3>${result.race_name}</h3>
+              <div class="result-date">${formattedDate}</div>
+              <div class="result-location">${result.location}</div>
+              <div class="result-stats">
+                <span>${result.laps} Vueltas</span>
+                <!-- <span>${result.distance} km</span> -->
+                <span>${result.time}</span>
               </div>
-              ${
-                highlightTags
-                  ? `<div class="result-highlights">${highlightTags}</div>`
-                  : ""
-              }
             </div>
-            <div class="result-actions">
-              <button class="btn-sm btn-primary" onclick="openResultModal('${
-                result.id
-              }')">
-                <i class="fas fa-edit"></i>
-              </button>
-              <button class="btn-sm btn-danger" onclick="deleteResult('${
-                result.id
-              }')">
-                <i class="fas fa-trash"></i>
-              </button>
-            </div>
+            ${
+              highlights
+                ? `<div class="result-highlights">${highlights}</div>`
+                : ""
+            }
           </div>
         `;
       })
       .join("");
   } catch (error) {
+    console.error("Error al cargar resultados:", error);
     container.innerHTML = `
       <div class="error-state">
         <i class="fas fa-exclamation-triangle"></i>
@@ -1592,6 +1722,16 @@ function getPositionLabel(position) {
   return "Lugar";
 }
 
+function formatLongDate(date) {
+  const months = [
+    "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+    "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+  ];
+  const day = String(date.getDate()).padStart(2, "0");
+  const month = months[date.getMonth()];
+  const year = date.getFullYear();
+  return `${day} ${month} ${year}`;
+}
 // ==================== SEASON STAT MANAGEMENT ====================
 
 async function loadSeasonStats(year) {
@@ -1617,6 +1757,32 @@ async function loadSeasonStats(year) {
   } catch (error) {
     console.error("Error loading season stats:", error);
     clearSeasonStatsForm();
+  }
+}
+
+async function loadPublicSeasonOverview() {
+  const year = new Date().getFullYear();
+  try {
+    const stats = await apiRequest(`season-stats&year=${year}`);
+    if (!stats) return;
+
+    document.getElementById("season-year-display").textContent =
+      stats.year || year;
+    document.getElementById("victories-count").textContent =
+      stats.victories ?? "0";
+    document.getElementById("podiums-count").textContent = stats.podiums ?? "0";
+
+    document.getElementById("position-rank").textContent =
+      stats.championship_position ? `${stats.championship_position}°` : "-";
+    document.getElementById("position-number").textContent =
+      stats.championship_position ? `${stats.championship_position}°` : "-";
+
+    document.getElementById("points-count").textContent = stats.total_points
+      ? `${stats.total_points} puntos`
+      : "0 puntos";
+    document.getElementById("points-gap").textContent = stats.points_gap ?? "-";
+  } catch (err) {
+    console.error("Error al cargar estadísticas públicas de temporada:", err);
   }
 }
 
@@ -1813,5 +1979,8 @@ document.addEventListener("DOMContentLoaded", () => {
   loadPhotos();
   loadPilotStats();
   loadPublicNews();
-  loadNews();
+  loadAllPublicNews();
+  loadPublicSeasonOverview();
+  loadPublicUpcomingRaces();
+  loadRaceResults();
 });

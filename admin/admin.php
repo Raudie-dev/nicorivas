@@ -58,6 +58,7 @@ try {
     <link rel="stylesheet" href="../styles.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="icon" href="../img/blanco-png-300x236.png" type="image/x-icon" />
     <style>
         /* Estilos adicionales específicos para el admin */
         .admin-stats {
