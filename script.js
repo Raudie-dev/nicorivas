@@ -351,44 +351,67 @@ function initializeInteractiveElements() {
 
 // Modal functionality (design only)
 function openVideoModal() {
-  const modal = document.getElementById("videoModal");
-  const modalVideo = document.getElementById("modalVideo");
+
+  const modal = document.getElementById("videoModal")
+  const modalVideo = document.getElementById("modalVideo")
 
   if (modal) {
-    modal.style.display = "block";
-    document.body.style.overflow = "hidden";
+    modal.style.display = "block"
+    document.body.style.overflow = "hidden"
 
     // Add entrance animation
-    modal.style.opacity = "0";
+    modal.style.opacity = "0"
     setTimeout(() => {
-      modal.style.opacity = "1";
-    }, 10);
+      modal.style.opacity = "1"
+    }, 10)
 
     if (modalVideo) {
       // Simulate video play for design purposes
-      modalVideo.currentTime = 0;
+      modalVideo.currentTime = 0
     }
   }
+
 }
 
 function closeVideoModal() {
-  const modal = document.getElementById("videoModal");
-  const modalVideo = document.getElementById("modalVideo");
+  const modal = document.getElementById("videoModal")
+  const modalVideo = document.getElementById("modalVideo")
 
   if (modal) {
-    modal.style.opacity = "0";
+    modal.style.opacity = "0"
     setTimeout(() => {
-      modal.style.display = "none";
-      document.body.style.overflow = "auto";
-    }, 200);
+      modal.style.display = "none"
+      document.body.style.overflow = "auto"
+    }, 200)
 
     if (modalVideo) {
-      modalVideo.pause();
-      modalVideo.currentTime = 0;
+      modalVideo.pause()
+      modalVideo.currentTime = 0
     }
   }
 }
-
+document.addEventListener('DOMContentLoaded', function() {
+    const playButton = document.querySelector('.play-button');
+    const closeButton = document.querySelector('.modal-close');
+    
+    if (playButton) {
+        playButton.addEventListener('click', openVideoModal);
+    }
+    
+    if (closeButton) {
+        closeButton.addEventListener('click', closeVideoModal);
+    }
+    
+    // Cerrar modal al hacer clic fuera del contenido
+    const modal = document.getElementById('videoModal');
+    if (modal) {
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                closeVideoModal();
+            }
+        });
+    }
+});
 // Multimedia tab functionality (design only)
 function showMultimediaTab(tab) {
   const videoTab = document.getElementById("videos-tab");

@@ -590,9 +590,9 @@ function handleRaces($db, $method, $id)
             }
 
             $stmt = $db->prepare("
-        INSERT INTO races (name, type, date, location, laps, distance, description, broadcast, is_next, created_at) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())
-    ");
+                INSERT INTO races (name, type, date, location, laps, distance, description, broadcast, is_next, created_at) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())
+            ");
 
             $stmt->execute([
                 $data['name'],
@@ -603,17 +603,17 @@ function handleRaces($db, $method, $id)
                 $data['distance'] ?? null,
                 $data['description'] ?? '',
                 $data['broadcast'] ?? '',
-                $data['is_next'] ?? false
+                0 // Siempre 0 al insertar, luego se recalcula
             ]);
 
             // Marcar automáticamente la próxima carrera según la fecha
             $db->exec("UPDATE races SET is_next = FALSE");
             $stmt = $db->prepare("
-        SELECT id FROM races 
-        WHERE date >= CURDATE()
-        ORDER BY date ASC
-        LIMIT 1
-    ");
+                SELECT id FROM races 
+                WHERE date >= CURDATE()
+                ORDER BY date ASC
+                LIMIT 1
+            ");
             $stmt->execute();
             $nextRace = $stmt->fetch(PDO::FETCH_ASSOC);
             if ($nextRace) {
@@ -628,6 +628,7 @@ function handleRaces($db, $method, $id)
 
             jsonResponse($race, 201);
             break;
+
         case 'PUT':
             if (!$id) {
                 jsonResponse(['error' => 'ID requerido'], 400);
@@ -639,12 +640,12 @@ function handleRaces($db, $method, $id)
             }
 
             $stmt = $db->prepare("
-        UPDATE races SET 
-            name = ?, type = ?, date = ?, location = ?, 
-            laps = ?, distance = ?, description = ?, broadcast = ?, 
-            is_next = ?, updated_at = NOW()
-        WHERE id = ?
-    ");
+                UPDATE races SET 
+                    name = ?, type = ?, date = ?, location = ?, 
+                    laps = ?, distance = ?, description = ?, broadcast = ?, 
+                    is_next = ?, updated_at = NOW()
+                WHERE id = ?
+            ");
 
             $stmt->execute([
                 $data['name'],
@@ -655,18 +656,18 @@ function handleRaces($db, $method, $id)
                 $data['distance'] ?? null,
                 $data['description'] ?? '',
                 $data['broadcast'] ?? '',
-                $data['is_next'] ?? false,
+                0, // Siempre 0 al actualizar, luego se recalcula
                 $id
             ]);
 
             // Marcar automáticamente la próxima carrera según la fecha
             $db->exec("UPDATE races SET is_next = FALSE");
             $stmt = $db->prepare("
-        SELECT id FROM races 
-        WHERE date >= CURDATE()
-        ORDER BY date ASC
-        LIMIT 1
-    ");
+                SELECT id FROM races 
+                WHERE date >= CURDATE()
+                ORDER BY date ASC
+                LIMIT 1
+            ");
             $stmt->execute();
             $nextRace = $stmt->fetch(PDO::FETCH_ASSOC);
             if ($nextRace) {
@@ -676,7 +677,6 @@ function handleRaces($db, $method, $id)
 
             jsonResponse(['message' => 'Carrera actualizada']);
             break;
-
 
         case 'DELETE':
             if (!$id) {
